@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  app:
+    network_mode: host
+    build: .
+    restart: always
+    container_name: animes_api
+    volumes:
+      - .:/animes_api
+
+  db:
+    container_name: animes_api_db
+    image: postgres:alpine
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - 5433:5433
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=animes_api
+    volumes:
+      - ./data:/var/lib/postgresql/data
