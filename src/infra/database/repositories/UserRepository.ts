@@ -2,16 +2,15 @@ import { UserEntity } from '@domains/database/entities/User/UserEntity';
 import { IUserRepository } from '@domains/database/repositories/UserRepository/IUserRepository';
 import { ORMTransactionInstance } from 'src/app/domains/database/ORM';
 
-export class UserRepository implements IUserRepository {
+export class UserRepository extends IUserRepository {
   public async createUser(
     user: UserEntity,
     transaction: ORMTransactionInstance,
   ): Promise<void> {
-    const { id, email, password, username } = user;
+    const { email, password, username } = user;
 
     await transaction.user.create({
       data: {
-        id,
         email,
         password,
         username,
