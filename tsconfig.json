@@ -11,8 +11,11 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "paths": {
-      "@domains/*": ["./src/app/domains/*"]
+      "@domains/*": ["./src/app/domains/*"],
+      "@app/*": ["./src/app/*"],
+      "@infra/*": ["./src/infra/*"]
     },
+    "resolveJsonModule": true,
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": false,
