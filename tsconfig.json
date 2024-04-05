@@ -10,6 +10,10 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
+    "paths": {
+      "@repositories/*": ["./src/app/domains/database/repositories/*"],
+      "@entities/*": ["./src/app/domains/database/entities/*"]
+    },
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": false,
