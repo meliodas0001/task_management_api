@@ -9,7 +9,7 @@ export class UserRepository implements IUserRepository {
   ): Promise<void> {
     const { id, email, password, username } = user;
 
-    return await transaction.user.create({
+    await transaction.user.create({
       data: {
         id,
         email,
