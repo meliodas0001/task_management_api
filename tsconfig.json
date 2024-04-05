@@ -11,8 +11,7 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "paths": {
-      "@repositories/*": ["./src/app/domains/database/repositories/*"],
-      "@entities/*": ["./src/app/domains/database/entities/*"]
+      "@domains/*": ["./src/app/domains/*"]
     },
     "incremental": true,
     "skipLibCheck": true,

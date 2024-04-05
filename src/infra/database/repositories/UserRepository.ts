@@ -1,5 +1,5 @@
-import { UserEntity } from '@entities/User/UserEntity';
-import { IUserRepository } from '@repositories/UserRepository/IUserRepository';
+import { UserEntity } from '@domains/database/entities/User/UserEntity';
+import { IUserRepository } from '@domains/database/repositories/UserRepository/IUserRepository';
 import { ORMTransactionInstance } from 'src/app/domains/database/ORM';
 
 export class UserRepository implements IUserRepository {

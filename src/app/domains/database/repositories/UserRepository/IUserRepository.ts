@@ -1,4 +1,4 @@
-import { UserEntity } from '@entities/User/UserEntity';
+import { UserEntity } from '@domains/database/entities/User/UserEntity';
 import { ORMTransactionInstance } from '../../ORM';
 
 export abstract class IUserRepository {
