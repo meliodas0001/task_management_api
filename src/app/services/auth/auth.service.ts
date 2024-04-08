@@ -3,9 +3,14 @@ import { IUserRepository } from '@domains/database/repositories/UserRepository/I
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import bcrypt from 'bcrypt';
 
+import { JwtService } from '@nestjs/jwt';
+
 @Injectable()
 export class AuthService {
-  constructor(private readonly userRepository: IUserRepository) {}
+  constructor(
+    private readonly userRepository: IUserRepository,
+    private jwtService: JwtService,
+  ) {}
 
   async login(userLogin: ILogin, transaction: ORMTransactionInstance) {
     const { email, password } = userLogin;
@@ -23,7 +28,11 @@ export class AuthService {
         throw new UnauthorizedException('Invalid credentials');
       }
 
-      return { email, id, username, roles };
+      const payload = { email, username, roles, id };
+
+      return {
+        access_token: this.jwtService.signAsync(payload),
+      };
     });
   }
 }
