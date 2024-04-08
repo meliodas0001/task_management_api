@@ -3,29 +3,58 @@ import { ORMTransactionInstance } from '@domains/database/ORM';
 import { IContainersRepository } from '@domains/database/repositories/ContainersRepository/IContainersRepository';
 
 export class ContainersRepository extends IContainersRepository {
-  public createContainer(
+  public async createContainer(
     container: ContainersEntity,
     transaction: ORMTransactionInstance,
   ): Promise<void> {
-    throw new Error('Method not implemented.');
+    const { description, name, ownerId } = container;
+
+    await transaction.container.create({
+      data: {
+        description,
+        name,
+        ownerId,
+      },
+    });
   }
 
-  public getAllContainers(
+  public async getAllContainers(
     userId: string,
     transaction: ORMTransactionInstance,
   ): Promise<ContainersEntity[]> {
-    throw new Error('Method not implemented.');
+    return await transaction.container.findMany({
+      where: {
+        ownerId: userId,
+      },
+    });
   }
-  public deleteContainer(
+
+  public async deleteContainer(
     containerId: string,
     transaction: ORMTransactionInstance,
   ): Promise<void> {
-    throw new Error('Method not implemented.');
+    await transaction.container.delete({
+      where: {
+        id: containerId,
+      },
+    });
   }
-  public updateContainer(
+
+  public async updateContainer(
     container: ContainersEntity,
     transaction: ORMTransactionInstance,
   ): Promise<void> {
-    throw new Error('Method not implemented.');
+    const { id, description, name, ownerId } = container;
+
+    transaction.container.update({
+      where: {
+        id,
+      },
+      data: {
+        description,
+        name,
+        ownerId,
+      },
+    });
   }
 }
