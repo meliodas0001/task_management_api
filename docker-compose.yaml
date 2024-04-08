@@ -4,12 +4,12 @@ services:
     network_mode: host
     build: .
     restart: always
-    container_name: animes_api
+    container_name: task_management_api
     volumes:
       - .:/animes_api
 
   db:
-    container_name: animes_api_db
+    container_name: task_management_api_db
     image: postgres:alpine
     restart: always
     env_file:
@@ -19,7 +19,7 @@ services:
       - 5432:5432
     environment:
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=animes_api
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=task_management
     volumes:
       - .:/data:/var/lib/postgresql/data
