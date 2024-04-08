@@ -12,7 +12,7 @@ export class AuthService {
 
     const findUser = await this.userRepository.findByEmail(email, transaction);
 
-    const { username, id } = findUser;
+    const { username, id, roles } = findUser;
 
     if (!findUser) {
       throw new UnauthorizedException('Invalid credentials');
@@ -23,7 +23,7 @@ export class AuthService {
         throw new UnauthorizedException('Invalid credentials');
       }
 
-      return { email, id, username };
+      return { email, id, username, roles };
     });
   }
 }
