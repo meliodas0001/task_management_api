@@ -20,7 +20,14 @@ export class ContainersService {
     return this.containersRepository.createContainer(container, transaction);
   }
 
-  findMany(userId: string, transaction: ORMTransactionInstance): Promise<any> {
+  async findMany(
+    userId: string,
+    transaction: ORMTransactionInstance,
+  ): Promise<any> {
+    const user = await this.usersRepository.findById(userId, transaction);
+
+    if (!user) throw new UnauthorizedException('User not found');
+
     return this.containersRepository.getAllContainers(userId, transaction);
   }
 
