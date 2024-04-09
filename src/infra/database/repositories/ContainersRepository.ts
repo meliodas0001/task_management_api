@@ -1,11 +1,12 @@
 import { ContainersEntity } from '@domains/database/entities/Containers/ContainersEntity';
 import { ORMTransactionInstance } from '@domains/database/ORM';
 import { IContainersRepository } from '@domains/database/repositories/ContainersRepository/IContainersRepository';
+import { IContainerCreate } from '@domains/requests/container/container';
 import { Roles } from '@prisma/client';
 
 export class ContainersRepository extends IContainersRepository {
   public async createContainer(
-    container: ContainersEntity,
+    container: IContainerCreate,
     transaction: ORMTransactionInstance,
   ): Promise<void> {
     const { description, name, ownerId } = container;

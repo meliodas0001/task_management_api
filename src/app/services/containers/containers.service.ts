@@ -3,13 +3,14 @@ import { IContainersRepository } from '@domains/database/repositories/Containers
 import { Injectable } from '@nestjs/common';
 import { ORMTransactionInstance } from '@domains/database/ORM';
 import { Roles } from '@prisma/client';
+import { IContainerCreate } from '@domains/requests/container/container';
 
 @Injectable()
 export class ContainersService {
   constructor(private readonly containersRepository: IContainersRepository) {}
 
   create(
-    container: ContainersEntity,
+    container: IContainerCreate,
     transaction: ORMTransactionInstance,
   ): Promise<void> {
     return this.containersRepository.createContainer(container, transaction);
