@@ -1,5 +1,8 @@
 import { ORMTransactionInstance } from '@domains/database/ORM';
-import { ContainersEntity } from '@domains/database/entities/Containers/ContainersEntity';
+import {
+  ContainersEntity,
+  ContainersFindById,
+} from '@domains/database/entities/Containers/ContainersEntity';
 import { IContainerCreate } from '@domains/requests/container/container';
 import { Roles } from '@prisma/client';
 
@@ -30,4 +33,9 @@ export abstract class IContainersRepository {
     transaction: ORMTransactionInstance,
     userRole?: Roles,
   ): Promise<void>;
+
+  public abstract findById(
+    id: string,
+    transaction: ORMTransactionInstance,
+  ): Promise<ContainersFindById>;
 }

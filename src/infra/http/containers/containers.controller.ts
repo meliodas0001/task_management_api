@@ -15,8 +15,14 @@ import { PrismaService } from '@infra/database/prisma.service';
 import { AuthGuard } from '@app/services/auth/auth.guard';
 import { Request, Response } from 'express';
 import { ValidatorPipe } from '@app/utils/validators/pipes/validatorPipes';
-import { CreateContainerSchema } from '@app/utils/validators/schemas/Container/container';
-import { IContainerCreate } from '@domains/requests/container/container';
+import {
+  AddUserContainerSchema,
+  CreateContainerSchema,
+} from '@app/utils/validators/schemas/Container/container';
+import {
+  IAddUserToContainer,
+  IContainerCreate,
+} from '@domains/requests/container/container';
 
 @Controller('containers')
 export class ContainerController {
@@ -50,15 +56,18 @@ export class ContainerController {
 
   @Put('add/user')
   @UseGuards(AuthGuard)
-  async addUserToContainer(@Body() body: any, @Req() req: Request) {
+  async addUserToContainer(
+    @Body(new ValidatorPipe(AddUserContainerSchema)) body: IAddUserToContainer,
+    @Req() req: Request,
+  ) {
     await this.prismaService.$transaction(async (transaction) => {
-      const { containerId, userId, userRoles } = body;
+      const { containerId, userId, userRole } = body;
 
       await this.containersService.addUserToContainer(
         userId,
         containerId,
         transaction,
-        userRoles,
+        userRole,
       );
     });
   }

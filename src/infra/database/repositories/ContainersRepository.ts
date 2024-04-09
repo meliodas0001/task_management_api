@@ -1,4 +1,7 @@
-import { ContainersEntity } from '@domains/database/entities/Containers/ContainersEntity';
+import {
+  ContainersEntity,
+  ContainersFindById,
+} from '@domains/database/entities/Containers/ContainersEntity';
 import { ORMTransactionInstance } from '@domains/database/ORM';
 import { IContainersRepository } from '@domains/database/repositories/ContainersRepository/IContainersRepository';
 import { IContainerCreate } from '@domains/requests/container/container';
@@ -83,7 +86,7 @@ export class ContainersRepository extends IContainersRepository {
     userId: string,
     containerId: string,
     transaction: ORMTransactionInstance,
-    userRole?: Roles,
+    userRole: Roles,
   ) {
     await transaction.user.update({
       where: {
@@ -100,10 +103,26 @@ export class ContainersRepository extends IContainersRepository {
 
     await transaction.role.create({
       data: {
-        name: userRole ? userRole : Roles.User,
-        userId,
+        name: userRole,
         containerId,
+        userId,
       },
     });
+  }
+
+  public async findById(
+    id: string,
+    transaction: ORMTransactionInstance,
+  ): Promise<ContainersFindById> {
+    const container = await transaction.container.findFirst({
+      where: {
+        id,
+      },
+      include: {
+        users: true,
+      },
+    });
+
+    return container;
   }
 }
