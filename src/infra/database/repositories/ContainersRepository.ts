@@ -1,6 +1,7 @@
 import { ContainersEntity } from '@domains/database/entities/Containers/ContainersEntity';
 import { ORMTransactionInstance } from '@domains/database/ORM';
 import { IContainersRepository } from '@domains/database/repositories/ContainersRepository/IContainersRepository';
+import { Roles } from '@prisma/client';
 
 export class ContainersRepository extends IContainersRepository {
   public async createContainer(
@@ -9,11 +10,25 @@ export class ContainersRepository extends IContainersRepository {
   ): Promise<void> {
     const { description, name, ownerId } = container;
 
-    await transaction.container.create({
+    const newContainer = await transaction.container.create({
       data: {
         description,
         name,
         ownerId,
+        roles: {
+          create: [{ name: Roles.Admin, userId: ownerId }],
+        },
+      },
+    });
+
+    await transaction.user.update({
+      where: { id: ownerId },
+      data: {
+        containers: {
+          connect: {
+            id: newContainer.id,
+          },
+        },
       },
     });
   }
@@ -22,11 +37,16 @@ export class ContainersRepository extends IContainersRepository {
     userId: string,
     transaction: ORMTransactionInstance,
   ): Promise<ContainersEntity[]> {
-    return await transaction.container.findMany({
+    const { containers } = await transaction.user.findFirst({
       where: {
-        ownerId: userId,
+        id: userId,
+      },
+      include: {
+        containers: true,
       },
     });
+
+    return containers;
   }
 
   public async deleteContainer(
@@ -54,6 +74,25 @@ export class ContainersRepository extends IContainersRepository {
         description,
         name,
         ownerId,
+      },
+    });
+  }
+
+  public async addUserToContainer(
+    userId: string,
+    containerId: string,
+    transaction: ORMTransactionInstance,
+  ) {
+    await transaction.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        containers: {
+          connect: {
+            id: containerId,
+          },
+        },
       },
     });
   }

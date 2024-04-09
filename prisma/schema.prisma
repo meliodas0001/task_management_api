@@ -8,11 +8,11 @@ datasource db {
 }
 
 model User {
-  id         String      @id @default(uuid())
-  username   String      @unique
-  email      String      @unique
-  password   String
-  roles      Roles[]     @default([User])
+  id       String @id @default(uuid())
+  username String @unique
+  email    String @unique
+  password String
+
   containers Container[] @relation("ContainerUsers")
 }
 
@@ -21,8 +21,17 @@ model Container {
   name        String
   description String?
   ownerId     String
+  roles       Role[]
 
   users User[] @relation("ContainerUsers")
+}
+
+model Role {
+  id          String    @id @default(uuid())
+  name        Roles
+  containerId String
+  userId      String
+  container   Container @relation(references: [id], fields: [containerId])
 }
 
 enum Roles {

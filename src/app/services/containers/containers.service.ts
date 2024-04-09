@@ -13,4 +13,20 @@ export class ContainersService {
   ): Promise<void> {
     return this.containersRepository.createContainer(container, transaction);
   }
+
+  findMany(userId: string, transaction: ORMTransactionInstance): Promise<any> {
+    return this.containersRepository.getAllContainers(userId, transaction);
+  }
+
+  addUserToContainer(
+    userId: string,
+    containerId: string,
+    transaction: ORMTransactionInstance,
+  ): Promise<void> {
+    return this.containersRepository.addUserToContainer(
+      userId,
+      containerId,
+      transaction,
+    );
+  }
 }

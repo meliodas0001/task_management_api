@@ -21,4 +21,10 @@ export abstract class IContainersRepository {
     container: ContainersEntity,
     transaction: ORMTransactionInstance,
   ): Promise<void>;
+
+  public abstract addUserToContainer(
+    userId: string,
+    containerId: string,
+    transaction: ORMTransactionInstance,
+  ): Promise<void>;
 }
