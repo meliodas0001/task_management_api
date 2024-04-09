@@ -5,7 +5,7 @@ import {
 import { ORMTransactionInstance } from '@domains/database/ORM';
 import { IContainersRepository } from '@domains/database/repositories/ContainersRepository/IContainersRepository';
 import { IContainerCreate } from '@domains/requests/container/container';
-import { Roles } from '@prisma/client';
+import { $Enums, Roles } from '@prisma/client';
 
 export class ContainersRepository extends IContainersRepository {
   public async createContainer(
@@ -124,5 +124,21 @@ export class ContainersRepository extends IContainersRepository {
     });
 
     return container;
+  }
+
+  public async updateUserRole(
+    containerId: string,
+    userId: string,
+    userRole: Roles,
+    transaction: ORMTransactionInstance,
+  ): Promise<void> {
+    await transaction.role.update({
+      where: {
+        userId,
+      },
+      data: {
+        name: userRole,
+      },
+    });
   }
 }

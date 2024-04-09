@@ -38,4 +38,11 @@ export abstract class IContainersRepository {
     id: string,
     transaction: ORMTransactionInstance,
   ): Promise<ContainersFindById>;
+
+  public abstract updateUserRole(
+    containerId: string,
+    userId: string,
+    userRole: Roles,
+    transaction: ORMTransactionInstance,
+  ): Promise<void>;
 }

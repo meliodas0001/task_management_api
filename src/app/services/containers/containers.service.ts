@@ -65,4 +65,34 @@ export class ContainersService {
       Roles[userRoles ? userRoles : Roles.User],
     );
   }
+
+  async updateUserRole(
+    containerId: string,
+    userId: string,
+    userRole: string,
+    transaction: ORMTransactionInstance,
+  ): Promise<void> {
+    const container = await this.containersRepository.findById(
+      containerId,
+      transaction,
+    );
+
+    let userFind = false;
+
+    container.users.forEach((x) => {
+      if (x.id === userId) {
+        userFind = true;
+      }
+    });
+
+    if (userFind === false)
+      throw new UnauthorizedException('User Not found in container');
+
+    return await this.containersRepository.updateUserRole(
+      containerId,
+      userId,
+      Roles[userRole],
+      transaction,
+    );
+  }
 }

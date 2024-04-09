@@ -71,4 +71,19 @@ export class ContainerController {
       );
     });
   }
+
+  @Put('update/user/role')
+  @UseGuards(AuthGuard)
+  async updateUserRole(@Body() body: any) {
+    await this.prismaService.$transaction(async (transaction) => {
+      const { containerId, userId, userRole } = body;
+
+      await this.containersService.updateUserRole(
+        containerId,
+        userId,
+        userRole,
+        transaction,
+      );
+    });
+  }
 }

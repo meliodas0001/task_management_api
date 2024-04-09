@@ -30,7 +30,7 @@ model Role {
   id          String    @id @default(uuid())
   name        Roles
   containerId String
-  userId      String
+  userId      String    @unique
   container   Container @relation(references: [id], fields: [containerId])
 }
 
