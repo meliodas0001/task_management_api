@@ -26,7 +26,6 @@ export class AuthService {
 
     const { username, id, roles } = findUser;
 
-    // Usar bcrypt.compare() de forma assíncrona
     const isMatch = await bcrypt.compare(password, findUser.password);
 
     if (!isMatch) {

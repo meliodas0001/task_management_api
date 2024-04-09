@@ -82,6 +82,7 @@ export class ContainersRepository extends IContainersRepository {
     userId: string,
     containerId: string,
     transaction: ORMTransactionInstance,
+    userRole?: Roles,
   ) {
     await transaction.user.update({
       where: {
@@ -93,6 +94,14 @@ export class ContainersRepository extends IContainersRepository {
             id: containerId,
           },
         },
+      },
+    });
+
+    await transaction.role.create({
+      data: {
+        name: userRole ? userRole : Roles.User,
+        userId,
+        containerId,
       },
     });
   }

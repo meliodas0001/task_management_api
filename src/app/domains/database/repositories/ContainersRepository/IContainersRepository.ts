@@ -1,5 +1,6 @@
 import { ORMTransactionInstance } from '@domains/database/ORM';
 import { ContainersEntity } from '@domains/database/entities/Containers/ContainersEntity';
+import { Roles } from '@prisma/client';
 
 export abstract class IContainersRepository {
   public abstract createContainer(
@@ -26,5 +27,6 @@ export abstract class IContainersRepository {
     userId: string,
     containerId: string,
     transaction: ORMTransactionInstance,
+    userRole?: Roles,
   ): Promise<void>;
 }

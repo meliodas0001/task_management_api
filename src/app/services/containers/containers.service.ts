@@ -2,6 +2,7 @@ import { ContainersEntity } from '@domains/database/entities/Containers/Containe
 import { IContainersRepository } from '@domains/database/repositories/ContainersRepository/IContainersRepository';
 import { Injectable } from '@nestjs/common';
 import { ORMTransactionInstance } from '@domains/database/ORM';
+import { Roles } from '@prisma/client';
 
 @Injectable()
 export class ContainersService {
@@ -22,11 +23,13 @@ export class ContainersService {
     userId: string,
     containerId: string,
     transaction: ORMTransactionInstance,
+    userRoles?: Roles,
   ): Promise<void> {
     return this.containersRepository.addUserToContainer(
       userId,
       containerId,
       transaction,
+      userRoles,
     );
   }
 }

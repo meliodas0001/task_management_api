@@ -1,4 +1,5 @@
 import { ContainersService } from '@app/services/containers/containers.service';
+
 import {
   Body,
   Controller,
@@ -9,6 +10,7 @@ import {
   Put,
   Res,
 } from '@nestjs/common';
+
 import { PrismaService } from '@infra/database/prisma.service';
 import { AuthGuard } from '@app/services/auth/auth.guard';
 import { Request, Response } from 'express';
@@ -22,9 +24,7 @@ export class ContainerController {
 
   @Post('create')
   @UseGuards(AuthGuard)
-  async createContainer(@Body() body: any, @Req() req: Request) {
-    console.log(req);
-
+  async createContainer(@Body() body: any) {
     await this.prismaService.$transaction(async (transaction) => {
       await this.containersService.create(body, transaction);
     });
@@ -47,12 +47,13 @@ export class ContainerController {
   @UseGuards(AuthGuard)
   async addUserToContainer(@Body() body: any, @Req() req: Request) {
     await this.prismaService.$transaction(async (transaction) => {
-      const { containerId, userId } = body;
+      const { containerId, userId, userRoles } = body;
 
       await this.containersService.addUserToContainer(
         userId,
         containerId,
         transaction,
+        userRoles,
       );
     });
   }
