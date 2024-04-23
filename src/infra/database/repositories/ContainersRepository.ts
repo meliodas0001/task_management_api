@@ -57,6 +57,12 @@ export class ContainersRepository extends IContainersRepository {
     containerId: string,
     transaction: ORMTransactionInstance,
   ): Promise<void> {
+    await transaction.role.deleteMany({
+      where: {
+        containerId,
+      },
+    });
+
     await transaction.container.delete({
       where: {
         id: containerId,

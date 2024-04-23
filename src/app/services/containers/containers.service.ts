@@ -77,6 +77,10 @@ export class ContainersService {
       transaction,
     );
 
+    if (!container) {
+      throw new UnauthorizedException('Container not found');
+    }
+
     let userFind = false;
 
     container.users.forEach((x) => {
@@ -92,6 +96,28 @@ export class ContainersService {
       containerId,
       userId,
       Roles[userRole],
+      transaction,
+    );
+  }
+
+  async deleteContainer(
+    containerId: string,
+    userId: string,
+    transaction: ORMTransactionInstance,
+  ): Promise<void> {
+    const container = await this.containersRepository.findById(
+      containerId,
+      transaction,
+    );
+
+    if (!container) throw new UnauthorizedException('Container not found');
+
+    if (container.ownerId != userId) {
+      throw new UnauthorizedException('User not owner of container');
+    }
+
+    return await this.containersRepository.deleteContainer(
+      containerId,
       transaction,
     );
   }

@@ -7,6 +7,7 @@ import {
   Req,
   Put,
   Res,
+  Delete,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 
@@ -32,6 +33,20 @@ export class ContainerController {
     private readonly prismaService: PrismaService,
     private containersService: ContainersService,
   ) {}
+
+  @Delete('delete/:id')
+  @UseGuards(AuthGuard)
+  async deleteContainer(@Req() req: Request, @Res() res: Response) {
+    await this.prismaService.$transaction(async (transaction) => {
+      await this.containersService.deleteContainer(
+        req.params.id,
+        req.user.id,
+        transaction,
+      );
+
+      res.status(200).send();
+    });
+  }
 
   @Post('create')
   @UseGuards(AuthGuard)
