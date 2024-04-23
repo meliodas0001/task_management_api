@@ -1,9 +1,10 @@
-import { IUserCreate } from '@domains/requests/users/users';
-import { UserService } from '@app/services/user/user.service';
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { ValidatorPipe } from '@app/utils/validators/pipes/validatorPipes';
+
 import { CreateUserSchema } from '@app/utils/validators/schemas/User/createUser';
+import { ValidatorPipe } from '@app/utils/validators/pipes/validatorPipes';
+import { UserService } from '@app/services/user/user.service';
 import { PrismaService } from '../../database/prisma.service';
+import { IUserCreate } from '@domains/requests/users/users';
 
 @Controller('users')
 export class UserController {

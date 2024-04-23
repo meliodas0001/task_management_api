@@ -5,7 +5,7 @@ import {
 import { ORMTransactionInstance } from '@domains/database/ORM';
 import { IContainersRepository } from '@domains/database/repositories/ContainersRepository/IContainersRepository';
 import { IContainerCreate } from '@domains/requests/container/container';
-import { $Enums, Roles } from '@prisma/client';
+import { Roles } from '@prisma/client';
 
 export class ContainersRepository extends IContainersRepository {
   public async createContainer(

@@ -1,5 +1,3 @@
-import { ContainersService } from '@app/services/containers/containers.service';
-
 import {
   Body,
   Controller,
@@ -10,15 +8,19 @@ import {
   Put,
   Res,
 } from '@nestjs/common';
+import { Request, Response } from 'express';
 
+import { ContainersService } from '@app/services/containers/containers.service';
+import { ValidatorPipe } from '@app/utils/validators/pipes/validatorPipes';
 import { PrismaService } from '@infra/database/prisma.service';
 import { AuthGuard } from '@app/services/auth/auth.guard';
-import { Request, Response } from 'express';
-import { ValidatorPipe } from '@app/utils/validators/pipes/validatorPipes';
+
 import {
   AddUserContainerSchema,
   CreateContainerSchema,
+  UpdateUserRoleSchema,
 } from '@app/utils/validators/schemas/Container/container';
+
 import {
   IAddUserToContainer,
   IContainerCreate,
@@ -74,7 +76,9 @@ export class ContainerController {
 
   @Put('update/user/role')
   @UseGuards(AuthGuard)
-  async updateUserRole(@Body() body: any) {
+  async updateUserRole(
+    @Body(new ValidatorPipe(UpdateUserRoleSchema)) body: IAddUserToContainer,
+  ) {
     await this.prismaService.$transaction(async (transaction) => {
       const { containerId, userId, userRole } = body;
 
