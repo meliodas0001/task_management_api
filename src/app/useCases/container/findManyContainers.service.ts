@@ -5,7 +5,7 @@ import { IContainersRepository } from '@domains/database/repositories/Containers
 import { IUserRepository } from '@domains/database/repositories/UserRepository/IUserRepository';
 
 @Injectable()
-export class FindManyContainers {
+export class FindManyContainersService {
   constructor(
     private readonly containersRepository: IContainersRepository,
     private readonly usersRepository: IUserRepository,

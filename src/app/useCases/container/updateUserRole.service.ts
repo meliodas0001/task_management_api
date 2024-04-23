@@ -3,7 +3,7 @@ import { IContainersRepository } from '@domains/database/repositories/Containers
 import { ORMTransactionInstance } from '@domains/database/ORM';
 import { Roles } from '@prisma/client';
 
-export class UpdateUserRoles {
+export class UpdateUserRolesService {
   constructor(private readonly containersRepository: IContainersRepository) {}
 
   async execute(

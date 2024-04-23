@@ -26,19 +26,30 @@ import {
   IAddUserToContainer,
   IContainerCreate,
 } from '@domains/requests/container/container';
+import { AddUserToContainerService } from '@app/useCases/container/addUserToContainer.service';
+import { CreateContainerService } from '@app/useCases/container/createContainer.service';
+import { DeleteContainerService } from '@app/useCases/container/deleteContainer.service';
+import { FindManyContainersService } from '@app/useCases/container/findManyContainers.service';
+import { GetContainerByIdService } from '@app/useCases/container/getContainerById.service';
+import { UpdateUserRolesService } from '@app/useCases/container/updateUserRole.service';
 
 @Controller('containers')
 export class ContainerController {
   constructor(
     private readonly prismaService: PrismaService,
-    private containersService: ContainersService,
+    private readonly addUserToContainerService: AddUserToContainerService,
+    private readonly createContainerService: CreateContainerService,
+    private readonly deleteContainerService: DeleteContainerService,
+    private readonly findManyContainersService: FindManyContainersService,
+    private readonly getContainerByIdService: GetContainerByIdService,
+    private readonly updateUserRolesService: UpdateUserRolesService,
   ) {}
 
   @Get('/:id')
   @UseGuards(AuthGuard)
   async getContainerById(@Req() req: Request, @Res() res: Response) {
     await this.prismaService.$transaction(async (transaction) => {
-      const container = await this.containersService.getContainerById(
+      const container = await this.getContainerByIdService.execute(
         req.params.id,
         req.user.id,
         transaction,
@@ -52,7 +63,7 @@ export class ContainerController {
   @UseGuards(AuthGuard)
   async deleteContainer(@Req() req: Request, @Res() res: Response) {
     await this.prismaService.$transaction(async (transaction) => {
-      await this.containersService.deleteContainer(
+      await this.deleteContainerService.execute(
         req.params.id,
         req.user.id,
         transaction,
@@ -69,7 +80,7 @@ export class ContainerController {
     @Req() Req: Request,
   ) {
     await this.prismaService.$transaction(async (transaction) => {
-      await this.containersService.create(body, Req.user.id, transaction);
+      await this.createContainerService.execute(body, Req.user.id, transaction);
     });
   }
 
@@ -77,7 +88,7 @@ export class ContainerController {
   @UseGuards(AuthGuard)
   async getAllUserContainers(@Req() req: Request, @Res() res: Response) {
     await this.prismaService.$transaction(async (transaction) => {
-      const aq = await this.containersService.findMany(
+      const aq = await this.findManyContainersService.execute(
         req.user.id,
         transaction,
       );
@@ -95,7 +106,7 @@ export class ContainerController {
     await this.prismaService.$transaction(async (transaction) => {
       const { containerId, userId, userRole } = body;
 
-      await this.containersService.addUserToContainer(
+      await this.addUserToContainerService.execute(
         userId,
         containerId,
         transaction,
@@ -112,7 +123,7 @@ export class ContainerController {
     await this.prismaService.$transaction(async (transaction) => {
       const { containerId, userId, userRole } = body;
 
-      await this.containersService.updateUserRole(
+      await this.updateUserRolesService.execute(
         containerId,
         userId,
         userRole,

@@ -6,7 +6,7 @@ import { ORMTransactionInstance } from '@domains/database/ORM';
 import { Roles } from '@prisma/client';
 
 @Injectable()
-export class AddUserToContainer {
+export class AddUserToContainerService {
   constructor(
     private readonly containersRepository: IContainersRepository,
     private readonly usersRepository: IUserRepository,

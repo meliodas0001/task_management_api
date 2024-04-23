@@ -1,8 +1,9 @@
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ORMTransactionInstance } from '@domains/database/ORM';
 import { IContainersRepository } from '@domains/database/repositories/ContainersRepository/IContainersRepository';
-import { UnauthorizedException } from '@nestjs/common';
 
-export class GetContainerById {
+@Injectable()
+export class GetContainerByIdService {
   constructor(private readonly containerRepository: IContainersRepository) {}
 
   async execute(

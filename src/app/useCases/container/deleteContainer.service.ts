@@ -4,7 +4,7 @@ import { IContainersRepository } from '@domains/database/repositories/Containers
 import { ORMTransactionInstance } from '@domains/database/ORM';
 
 @Injectable()
-export class DeleteContainer {
+export class DeleteContainerService {
   constructor(private readonly containersRepository: IContainersRepository) {}
 
   async execute(
