@@ -6,6 +6,7 @@ export interface ContainersEntity {
   name: string;
   description: string;
   ownerId: string;
+  public: boolean;
 }
 
 export interface ContainersFindById {
@@ -13,6 +14,7 @@ export interface ContainersFindById {
   name: string;
   description: string;
   ownerId: string;
+  public: boolean;
 
   users: UserEntity[];
 }

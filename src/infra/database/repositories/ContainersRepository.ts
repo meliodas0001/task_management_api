@@ -10,23 +10,24 @@ import { Roles } from '@prisma/client';
 export class ContainersRepository extends IContainersRepository {
   public async createContainer(
     container: IContainerCreate,
+    userId: string,
     transaction: ORMTransactionInstance,
   ): Promise<void> {
-    const { description, name, ownerId } = container;
+    const { description, name } = container;
 
     const newContainer = await transaction.container.create({
       data: {
         description,
         name,
-        ownerId,
+        ownerId: userId,
         roles: {
-          create: [{ name: Roles.Admin, userId: ownerId }],
+          create: [{ name: Roles.Admin, userId: userId }],
         },
       },
     });
 
     await transaction.user.update({
-      where: { id: ownerId },
+      where: { id: userId },
       data: {
         containers: {
           connect: {
@@ -133,14 +134,13 @@ export class ContainersRepository extends IContainersRepository {
   }
 
   public async updateUserRole(
-    containerId: string,
-    userId: string,
+    id: string,
     userRole: Roles,
     transaction: ORMTransactionInstance,
   ): Promise<void> {
     await transaction.role.update({
       where: {
-        userId,
+        id,
       },
       data: {
         name: userRole,

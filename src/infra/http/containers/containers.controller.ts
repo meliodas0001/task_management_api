@@ -34,6 +34,20 @@ export class ContainerController {
     private containersService: ContainersService,
   ) {}
 
+  @Get('/:id')
+  @UseGuards(AuthGuard)
+  async getContainerById(@Req() req: Request, @Res() res: Response) {
+    await this.prismaService.$transaction(async (transaction) => {
+      const container = await this.containersService.getContainerById(
+        req.params.id,
+        req.user.id,
+        transaction,
+      );
+
+      res.json(container).status(200);
+    });
+  }
+
   @Delete('delete/:id')
   @UseGuards(AuthGuard)
   async deleteContainer(@Req() req: Request, @Res() res: Response) {
@@ -52,9 +66,10 @@ export class ContainerController {
   @UseGuards(AuthGuard)
   async createContainer(
     @Body(new ValidatorPipe(CreateContainerSchema)) body: IContainerCreate,
+    @Req() Req: Request,
   ) {
     await this.prismaService.$transaction(async (transaction) => {
-      await this.containersService.create(body, transaction);
+      await this.containersService.create(body, Req.user.id, transaction);
     });
   }
 

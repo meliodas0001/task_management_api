@@ -22,6 +22,7 @@ model Container {
   description String?
   ownerId     String
   roles       Role[]
+  public      Boolean @default(false)
 
   users User[] @relation("ContainerUsers")
 }
@@ -30,7 +31,7 @@ model Role {
   id          String    @id @default(uuid())
   name        Roles
   containerId String
-  userId      String    @unique
+  userId      String
   container   Container @relation(references: [id], fields: [containerId])
 }
 

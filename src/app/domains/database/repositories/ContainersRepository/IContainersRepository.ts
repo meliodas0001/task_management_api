@@ -9,6 +9,7 @@ import { Roles } from '@prisma/client';
 export abstract class IContainersRepository {
   public abstract createContainer(
     container: IContainerCreate,
+    userId: string,
     transaction: ORMTransactionInstance,
   ): Promise<void>;
 

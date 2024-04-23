@@ -1,10 +1,10 @@
-import { ContainersEntity } from '@domains/database/entities/Containers/ContainersEntity';
-import { IContainersRepository } from '@domains/database/repositories/ContainersRepository/IContainersRepository';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { ORMTransactionInstance } from '@domains/database/ORM';
 import { Roles } from '@prisma/client';
-import { IContainerCreate } from '@domains/requests/container/container';
+
+import { IContainersRepository } from '@domains/database/repositories/ContainersRepository/IContainersRepository';
 import { IUserRepository } from '@domains/database/repositories/UserRepository/IUserRepository';
+import { IContainerCreate } from '@domains/requests/container/container';
+import { ORMTransactionInstance } from '@domains/database/ORM';
 
 @Injectable()
 export class ContainersService {
@@ -15,9 +15,14 @@ export class ContainersService {
 
   create(
     container: IContainerCreate,
+    userId: string,
     transaction: ORMTransactionInstance,
   ): Promise<void> {
-    return this.containersRepository.createContainer(container, transaction);
+    return this.containersRepository.createContainer(
+      container,
+      userId,
+      transaction,
+    );
   }
 
   async findMany(
@@ -120,5 +125,33 @@ export class ContainersService {
       containerId,
       transaction,
     );
+  }
+
+  async getContainerById(
+    containerId: string,
+    userId: string,
+    transaction: ORMTransactionInstance,
+  ): Promise<any> {
+    const container = await this.containersRepository.findById(
+      containerId,
+      transaction,
+    );
+
+    if (!container) throw new UnauthorizedException('Container not found');
+
+    if (!container.public) {
+      let userFind = false;
+
+      container.users.forEach((x) => {
+        if (x.id === userId) {
+          userFind = true;
+        }
+      });
+
+      if (!userFind)
+        throw new UnauthorizedException('You dont have permissions!');
+    }
+
+    return container;
   }
 }
