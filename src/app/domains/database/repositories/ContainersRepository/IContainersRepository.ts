@@ -41,8 +41,7 @@ export abstract class IContainersRepository {
   ): Promise<ContainersFindById>;
 
   public abstract updateUserRole(
-    containerId: string,
-    userId: string,
+    id: string,
     userRole: Roles,
     transaction: ORMTransactionInstance,
   ): Promise<void>;

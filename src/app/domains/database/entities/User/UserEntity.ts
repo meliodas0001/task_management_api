@@ -7,3 +7,10 @@ export interface UserEntity {
   password: string;
   roles?: PrismaRoles[];
 }
+
+export interface UserDTO {
+  id: string;
+  username: string;
+  email: string;
+  roles?: PrismaRoles[];
+}

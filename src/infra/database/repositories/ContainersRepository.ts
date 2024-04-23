@@ -126,7 +126,13 @@ export class ContainersRepository extends IContainersRepository {
         id,
       },
       include: {
-        users: true,
+        users: {
+          select: {
+            id: true,
+            username: true,
+            email: true,
+          },
+        },
       },
     });
 

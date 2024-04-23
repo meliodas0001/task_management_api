@@ -11,7 +11,6 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 
-import { ContainersService } from '@app/services/containers/containers.service';
 import { ValidatorPipe } from '@app/utils/validators/pipes/validatorPipes';
 import { PrismaService } from '@infra/database/prisma.service';
 import { AuthGuard } from '@app/services/auth/auth.guard';
@@ -45,7 +44,7 @@ export class ContainerController {
     private readonly updateUserRolesService: UpdateUserRolesService,
   ) {}
 
-  @Get('/:id')
+  @Get('find/:id')
   @UseGuards(AuthGuard)
   async getContainerById(@Req() req: Request, @Res() res: Response) {
     await this.prismaService.$transaction(async (transaction) => {
@@ -88,12 +87,12 @@ export class ContainerController {
   @UseGuards(AuthGuard)
   async getAllUserContainers(@Req() req: Request, @Res() res: Response) {
     await this.prismaService.$transaction(async (transaction) => {
-      const aq = await this.findManyContainersService.execute(
+      const containers = await this.findManyContainersService.execute(
         req.user.id,
         transaction,
       );
 
-      res.json(aq).status(200);
+      res.json(containers).status(200);
     });
   }
 

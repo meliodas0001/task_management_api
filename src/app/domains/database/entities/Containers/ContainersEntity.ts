@@ -1,5 +1,4 @@
-import { Roles } from '@prisma/client';
-import { UserEntity } from '../User/UserEntity';
+import { UserDTO } from '../User/UserEntity';
 
 export interface ContainersEntity {
   id: string;
@@ -16,5 +15,5 @@ export interface ContainersFindById {
   ownerId: string;
   public: boolean;
 
-  users: UserEntity[];
+  users: UserDTO[];
 }

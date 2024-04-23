@@ -31,7 +31,6 @@ export class UpdateUserRolesService {
       throw new UnauthorizedException('User not found in container');
 
     return await this.containersRepository.updateUserRole(
-      containerId,
       userId,
       Roles[userRole],
       transaction,
