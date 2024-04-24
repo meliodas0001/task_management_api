@@ -9,4 +9,4 @@ import { CreateFolderService } from '@app/useCases/folders/createFolder.service'
   providers: [PrismaService, CreateFolderService],
   imports: [DatabaseModule],
 })
-export class Folders {}
+export class FoldersModule {}
