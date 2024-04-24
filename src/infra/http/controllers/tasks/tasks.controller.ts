@@ -5,6 +5,10 @@ import { TaskCreateService } from '@app/useCases/tasks/taskCreate.service';
 import { PrismaService } from '@infra/database/prisma.service';
 
 import { AuthGuard } from '@app/services/auth/auth.guard';
+import { ValidatorPipe } from '@app/utils/validators/pipes/validatorPipes';
+
+import { CreateTaskSchema } from '@app/utils/validators/schemas/Tasks/createTask';
+import { ICreateTaskDTO } from '@domains/requests/tasks/tasksCreate';
 
 @Controller('containers/folders/tasks')
 export class TasksController {
@@ -16,7 +20,7 @@ export class TasksController {
   @Post('create')
   @UseGuards(AuthGuard)
   async createTask(
-    @Body() body: any,
+    @Body(new ValidatorPipe(CreateTaskSchema)) body: ICreateTaskDTO,
     @Req() req: Request,
     @Res() res: Response,
   ) {
@@ -31,7 +35,9 @@ export class TasksController {
         author: req.user.username,
       };
 
-      this.taskCreateService.execute(task, transaction);
+      await this.taskCreateService.execute(task, transaction);
+
+      res.status(201).send();
     });
   }
 }
