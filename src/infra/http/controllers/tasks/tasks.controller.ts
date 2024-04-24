@@ -18,6 +18,7 @@ import { ValidatorPipe } from '@app/utils/validators/pipes/validatorPipes';
 import { CreateTaskSchema } from '@app/utils/validators/schemas/Tasks/createTask';
 import { ICreateTaskDTO } from '@domains/requests/tasks/tasksCreate';
 import { TaskDeleteService } from '@app/useCases/tasks/taskDelete.service';
+import { DeleteTaskSchema } from '@app/utils/validators/schemas/Tasks/deleteTask';
 
 @Controller('containers/folders/tasks')
 export class TasksController {
@@ -54,7 +55,7 @@ export class TasksController {
   @Delete('delete')
   @UseGuards(AuthGuard)
   async deleteTask(
-    @Body() body: any,
+    @Body(new ValidatorPipe(DeleteTaskSchema)) body: any,
     @Req() req: Request,
     @Res() res: Response,
   ) {

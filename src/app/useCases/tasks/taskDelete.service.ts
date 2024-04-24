@@ -13,6 +13,8 @@ export class TaskDeleteService {
       throw new NotFoundException('Task not found');
     }
 
+    // Verify if user has permission to delete
+
     await this.tasksRepository.deleteTask(taskId, transaction);
   }
 }
