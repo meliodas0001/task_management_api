@@ -43,11 +43,11 @@ export class FoldersRepository implements IFoldersRepository {
     });
   }
 
-  public findManyFolders(
+  public async findManyFolders(
     containerId: string,
     transaction: ORMTransactionInstance,
   ): Promise<IFoldersEntity[]> {
-    return transaction.folders.findMany({
+    return await transaction.folders.findMany({
       where: {
         containerId,
       },

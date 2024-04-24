@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   Post,
   Req,
   Res,
@@ -18,6 +19,7 @@ import { PrismaService } from '@infra/database/prisma.service';
 import { AuthGuard } from '@app/services/auth/auth.guard';
 import { DeleteFolderService } from '@app/useCases/folders/deleteFolder.service';
 import { DeleteFolderSchema } from '@app/utils/validators/schemas/Folders/deleteFolder';
+import { FindManyFoldersService } from '@app/useCases/folders/findManyFolders.service';
 
 @Controller('containers/folders')
 export class FoldersController {
@@ -25,6 +27,7 @@ export class FoldersController {
     private prismaService: PrismaService,
     private readonly createFolderService: CreateFolderService,
     private readonly deleteFolderService: DeleteFolderService,
+    private readonly findManyFoldersService: FindManyFoldersService,
   ) {}
 
   @Post('create')
@@ -52,6 +55,7 @@ export class FoldersController {
   }
 
   @Delete('delete')
+  @UseGuards(AuthGuard)
   async deleteFolder(
     @Body(new ValidatorPipe(DeleteFolderSchema)) body: any,
     @Req() req: Request,
@@ -64,5 +68,20 @@ export class FoldersController {
     });
 
     res.status(201).send();
+  }
+
+  @Get('findMany')
+  @UseGuards(AuthGuard)
+  async findMany(@Body() body: any, @Req() req: Request, @Res() res: Response) {
+    const { containerId } = body;
+
+    await this.prismaService.$transaction(async (transaction) => {
+      const foldersList = await this.findManyFoldersService.execute(
+        containerId,
+        transaction,
+      );
+
+      res.json(foldersList).status(200).send();
+    });
   }
 }
