@@ -18,7 +18,7 @@ export abstract class IFoldersRepository {
   public abstract deleteFolder(
     folderId: string,
     transaction: ORMTransactionInstance,
-  );
+  ): Promise<void>;
 
   public abstract findManyFolders(
     containerId: string,
