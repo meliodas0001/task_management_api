@@ -9,6 +9,6 @@ export interface IFoldersEntity {
   createdAt: Date;
   author: string;
 
-  container: ContainersEntity;
-  tasks: ITasksEntity[];
+  container?: ContainersEntity;
+  tasks?: ITasksEntity[];
 }

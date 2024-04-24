@@ -1,4 +1,12 @@
-import { Body, Controller, Post, Req, Res, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { Request, Response } from 'express';
 
 import { CreateFolderService } from '@app/useCases/folders/createFolder.service';
@@ -8,12 +16,14 @@ import { ValidatorPipe } from '@app/utils/validators/pipes/validatorPipes';
 
 import { PrismaService } from '@infra/database/prisma.service';
 import { AuthGuard } from '@app/services/auth/auth.guard';
+import { DeleteFolderService } from '@app/useCases/folders/deleteFolder.service';
 
 @Controller('containers/folders')
 export class FoldersController {
   constructor(
     private prismaService: PrismaService,
     private readonly createFolderService: CreateFolderService,
+    private readonly deleteFolderService: DeleteFolderService,
   ) {}
 
   @Post('create')
@@ -35,6 +45,21 @@ export class FoldersController {
       };
 
       await this.createFolderService.execute(folder, transaction);
+    });
+
+    res.status(201).send();
+  }
+
+  @Delete('delete')
+  async deleteFolder(
+    @Body() body: any,
+    @Req() req: Request,
+    @Res() res: Response,
+  ) {
+    const { folderId } = body;
+
+    await this.prismaService.$transaction(async (transaction) => {
+      await this.deleteFolderService.execute(folderId, transaction);
     });
 
     res.status(201).send();
