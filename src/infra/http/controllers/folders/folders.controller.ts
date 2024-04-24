@@ -11,12 +11,13 @@ import { Request, Response } from 'express';
 
 import { CreateFolderService } from '@app/useCases/folders/createFolder.service';
 
-import { FoldersCreateSchema } from '@app/utils/validators/schemas/Folders/folders';
+import { FoldersCreateSchema } from '@app/utils/validators/schemas/Folders/createFolder';
 import { ValidatorPipe } from '@app/utils/validators/pipes/validatorPipes';
 
 import { PrismaService } from '@infra/database/prisma.service';
 import { AuthGuard } from '@app/services/auth/auth.guard';
 import { DeleteFolderService } from '@app/useCases/folders/deleteFolder.service';
+import { DeleteFolderSchema } from '@app/utils/validators/schemas/Folders/deleteFolder';
 
 @Controller('containers/folders')
 export class FoldersController {
@@ -52,7 +53,7 @@ export class FoldersController {
 
   @Delete('delete')
   async deleteFolder(
-    @Body() body: any,
+    @Body(new ValidatorPipe(DeleteFolderSchema)) body: any,
     @Req() req: Request,
     @Res() res: Response,
   ) {
