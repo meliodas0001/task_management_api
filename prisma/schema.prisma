@@ -24,7 +24,8 @@ model Container {
   roles       Role[]
   public      Boolean @default(false)
 
-  users User[] @relation("ContainerUsers")
+  users   User[]    @relation("ContainerUsers")
+  folders Folders[]
 }
 
 model Role {
@@ -35,8 +36,38 @@ model Role {
   container   Container @relation(references: [id], fields: [containerId])
 }
 
+model Folders {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  containerId String
+  createdAt   DateTime @default(now())
+  author      String
+
+  container Container @relation(references: [id], fields: [containerId])
+  tasks     Tasks[]
+}
+
+model Tasks {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  folderId    String
+  author      String
+  createdAt   DateTime @default(now())
+  status      Status
+
+  folder Folders @relation(references: [id], fields: [folderId])
+}
+
 enum Roles {
   Admin
   Moderator
   User
+}
+
+enum Status {
+  Open
+  InProgress
+  Done
 }
