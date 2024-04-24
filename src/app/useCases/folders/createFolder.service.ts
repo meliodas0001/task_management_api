@@ -1,21 +1,16 @@
 import { ORMTransactionInstance } from '@domains/database/ORM';
 import { IFoldersRepository } from '@domains/database/repositories/FoldersRepository/IFoldersRepository';
 import { ICreateFolder } from '@domains/requests/folders/createFolder';
+import { Injectable } from '@nestjs/common';
 
-export class FoldersRepository implements IFoldersRepository {
-  public async createFolder(
+@Injectable()
+export class CreateFolderService {
+  constructor(private readonly foldersRepository: IFoldersRepository) {}
+
+  async execute(
     folder: ICreateFolder,
     transaction: ORMTransactionInstance,
   ): Promise<void> {
-    const { name, description, containerId, author } = folder;
-
-    await transaction.folders.create({
-      data: {
-        name,
-        description: description ? description : '',
-        containerId,
-        author,
-      },
-    });
+    await this.foldersRepository.createFolder(folder, transaction);
   }
 }
