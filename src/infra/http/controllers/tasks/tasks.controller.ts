@@ -64,5 +64,7 @@ export class TasksController {
     await this.prismaService.$transaction(async (transaction) => {
       await this.taskDeleteService.execute(taskId, transaction);
     });
+
+    res.status(200).send();
   }
 }
