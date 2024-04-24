@@ -17,13 +17,15 @@ import { CreateFolderService } from '@app/useCases/folders/createFolder.service'
 import { FoldersCreateSchema } from '@app/utils/validators/schemas/Folders/createFolder';
 import { ValidatorPipe } from '@app/utils/validators/pipes/validatorPipes';
 
-import { PrismaService } from '@infra/database/prisma.service';
+import { DeleteFolderSchema } from '@app/utils/validators/schemas/Folders/deleteFolder';
+import { UpdateFolderSchema } from '@app/utils/validators/schemas/Folders/updateFolder';
+import { IUpdateFolder } from '@domains/requests/folders/updateFolder';
+
 import { FindManyFoldersService } from '@app/useCases/folders/findManyFolders.service';
 import { DeleteFolderService } from '@app/useCases/folders/deleteFolder.service';
-import { DeleteFolderSchema } from '@app/utils/validators/schemas/Folders/deleteFolder';
-
-import { AuthGuard } from '@app/services/auth/auth.guard';
 import { UpdateFolderService } from '@app/useCases/folders/updateFolder.service';
+import { PrismaService } from '@infra/database/prisma.service';
+import { AuthGuard } from '@app/services/auth/auth.guard';
 
 @Controller('containers/folders')
 export class FoldersController {
@@ -93,7 +95,7 @@ export class FoldersController {
   @Put('update')
   @UseGuards(AuthGuard)
   async updateFolder(
-    @Body() body: any,
+    @Body(new ValidatorPipe(UpdateFolderSchema)) body: IUpdateFolder,
     @Req() req: Request,
     @Res() res: Response,
   ) {
