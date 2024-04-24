@@ -5,6 +5,7 @@ import { PrismaService } from '@infra/database/prisma.service';
 import { CreateFolderService } from '@app/useCases/folders/createFolder.service';
 import { DeleteFolderService } from '@app/useCases/folders/deleteFolder.service';
 import { FindManyFoldersService } from '@app/useCases/folders/findManyFolders.service';
+import { UpdateFolderService } from '@app/useCases/folders/updateFolder.service';
 
 @Module({
   controllers: [FoldersController],
@@ -13,6 +14,7 @@ import { FindManyFoldersService } from '@app/useCases/folders/findManyFolders.se
     CreateFolderService,
     DeleteFolderService,
     FindManyFoldersService,
+    UpdateFolderService,
   ],
   imports: [DatabaseModule],
 })

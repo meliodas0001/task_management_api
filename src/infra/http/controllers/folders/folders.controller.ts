@@ -4,10 +4,12 @@ import {
   Delete,
   Get,
   Post,
+  Put,
   Req,
   Res,
   UseGuards,
 } from '@nestjs/common';
+
 import { Request, Response } from 'express';
 
 import { CreateFolderService } from '@app/useCases/folders/createFolder.service';
@@ -16,10 +18,12 @@ import { FoldersCreateSchema } from '@app/utils/validators/schemas/Folders/creat
 import { ValidatorPipe } from '@app/utils/validators/pipes/validatorPipes';
 
 import { PrismaService } from '@infra/database/prisma.service';
-import { AuthGuard } from '@app/services/auth/auth.guard';
+import { FindManyFoldersService } from '@app/useCases/folders/findManyFolders.service';
 import { DeleteFolderService } from '@app/useCases/folders/deleteFolder.service';
 import { DeleteFolderSchema } from '@app/utils/validators/schemas/Folders/deleteFolder';
-import { FindManyFoldersService } from '@app/useCases/folders/findManyFolders.service';
+
+import { AuthGuard } from '@app/services/auth/auth.guard';
+import { UpdateFolderService } from '@app/useCases/folders/updateFolder.service';
 
 @Controller('containers/folders')
 export class FoldersController {
@@ -28,6 +32,7 @@ export class FoldersController {
     private readonly createFolderService: CreateFolderService,
     private readonly deleteFolderService: DeleteFolderService,
     private readonly findManyFoldersService: FindManyFoldersService,
+    private readonly updateFolderService: UpdateFolderService,
   ) {}
 
   @Post('create')
@@ -83,5 +88,28 @@ export class FoldersController {
 
       res.json(foldersList).status(200).send();
     });
+  }
+
+  @Put('update')
+  @UseGuards(AuthGuard)
+  async updateFolder(
+    @Body() body: any,
+    @Req() req: Request,
+    @Res() res: Response,
+  ) {
+    const { id, name, description } = body;
+
+    await this.prismaService.$transaction(async (transaction) => {
+      await this.updateFolderService.execute(
+        {
+          id,
+          name,
+          description,
+        },
+        transaction,
+      );
+    });
+
+    res.status(200).send();
   }
 }
