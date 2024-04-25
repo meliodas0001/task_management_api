@@ -10,17 +10,18 @@ import {
   Get,
 } from '@nestjs/common';
 
+import { TaskFindManyService } from '@app/useCases/tasks/taskFindMany.service';
+import { TaskDeleteService } from '@app/useCases/tasks/taskDelete.service';
 import { TaskCreateService } from '@app/useCases/tasks/taskCreate.service';
 import { PrismaService } from '@infra/database/prisma.service';
 
-import { AuthGuard } from '@app/services/auth/auth.guard';
 import { ValidatorPipe } from '@app/utils/validators/pipes/validatorPipes';
+import { AuthGuard } from '@app/services/auth/auth.guard';
 
+import { FindManyTasksSchema } from '@app/utils/validators/schemas/Tasks/findMany';
 import { CreateTaskSchema } from '@app/utils/validators/schemas/Tasks/createTask';
-import { ICreateTaskDTO } from '@domains/requests/tasks/tasksCreate';
-import { TaskDeleteService } from '@app/useCases/tasks/taskDelete.service';
 import { DeleteTaskSchema } from '@app/utils/validators/schemas/Tasks/deleteTask';
-import { TaskFindManyService } from '@app/useCases/tasks/taskFindMany.service';
+import { ICreateTaskDTO } from '@domains/requests/tasks/tasksCreate';
 
 @Controller('containers/folders/tasks')
 export class TasksController {
@@ -74,7 +75,7 @@ export class TasksController {
   @Get('findMany')
   @UseGuards(AuthGuard)
   async findManyTasks(
-    @Body() body: any,
+    @Body(new ValidatorPipe(FindManyTasksSchema)) body: any,
     @Req() req: Request,
     @Res() res: Response,
   ) {
