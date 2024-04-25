@@ -7,6 +7,7 @@ import {
   Req,
   Res,
   Delete,
+  Get,
 } from '@nestjs/common';
 
 import { TaskCreateService } from '@app/useCases/tasks/taskCreate.service';
@@ -19,6 +20,7 @@ import { CreateTaskSchema } from '@app/utils/validators/schemas/Tasks/createTask
 import { ICreateTaskDTO } from '@domains/requests/tasks/tasksCreate';
 import { TaskDeleteService } from '@app/useCases/tasks/taskDelete.service';
 import { DeleteTaskSchema } from '@app/utils/validators/schemas/Tasks/deleteTask';
+import { TaskFindManyService } from '@app/useCases/tasks/taskFindMany.service';
 
 @Controller('containers/folders/tasks')
 export class TasksController {
@@ -26,6 +28,7 @@ export class TasksController {
     private readonly prismaService: PrismaService,
     private readonly taskCreateService: TaskCreateService,
     private readonly taskDeleteService: TaskDeleteService,
+    private readonly taskFindManyService: TaskFindManyService,
   ) {}
 
   @Post('create')
@@ -66,5 +69,22 @@ export class TasksController {
     });
 
     res.status(200).send();
+  }
+
+  @Get('findMany')
+  @UseGuards(AuthGuard)
+  async findManyTasks(
+    @Body() body: any,
+    @Req() req: Request,
+    @Res() res: Response,
+  ) {
+    await this.prismaService.$transaction(async (transaction) => {
+      const tasks = await this.taskFindManyService.execute(
+        body.folderId,
+        transaction,
+      );
+
+      res.json(tasks).status(200);
+    });
   }
 }

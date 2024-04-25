@@ -15,7 +15,7 @@ export abstract class ITasksRepository {
 
   public abstract findMany(
     folderId: string,
-    tansaction: ORMTransactionInstance,
+    transaction: ORMTransactionInstance,
   ): Promise<ITasksEntity[]>;
 
   public abstract findById(

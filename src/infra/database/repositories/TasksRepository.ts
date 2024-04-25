@@ -26,11 +26,15 @@ export class TasksRepository implements ITasksRepository {
     });
   }
 
-  public findMany(
+  public async findMany(
     folderId: string,
-    tansaction: ORMTransactionInstance,
+    transaction: ORMTransactionInstance,
   ): Promise<ITasksEntity[]> {
-    throw new Error('Method not implemented.');
+    return await transaction.tasks.findMany({
+      where: {
+        folderId,
+      },
+    });
   }
   public updateTask(
     task: any,
