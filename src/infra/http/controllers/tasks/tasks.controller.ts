@@ -8,11 +8,13 @@ import {
   Res,
   Delete,
   Get,
+  Put,
 } from '@nestjs/common';
 
 import { TaskFindManyService } from '@app/useCases/tasks/taskFindMany.service';
 import { TaskDeleteService } from '@app/useCases/tasks/taskDelete.service';
 import { TaskCreateService } from '@app/useCases/tasks/taskCreate.service';
+import { TaskUpdateService } from '@app/useCases/tasks/taskUpdate.service';
 import { PrismaService } from '@infra/database/prisma.service';
 
 import { ValidatorPipe } from '@app/utils/validators/pipes/validatorPipes';
@@ -30,6 +32,7 @@ export class TasksController {
     private readonly taskCreateService: TaskCreateService,
     private readonly taskDeleteService: TaskDeleteService,
     private readonly taskFindManyService: TaskFindManyService,
+    private readonly taksUpdateService: TaskUpdateService,
   ) {}
 
   @Post('create')
@@ -87,5 +90,30 @@ export class TasksController {
 
       res.json(tasks).status(200);
     });
+  }
+
+  @Put('update')
+  @UseGuards(AuthGuard)
+  async updateTask(
+    @Body() body: any,
+    @Req() req: Request,
+    @Res() res: Response,
+  ) {
+    await this.prismaService.$transaction(async (transaction) => {
+      const { id, title, description, status, folderId } = body;
+
+      await this.taksUpdateService.execute(
+        {
+          id,
+          title,
+          description,
+          status,
+          folderId,
+        },
+        transaction,
+      );
+    });
+
+    res.status(200).send();
   }
 }

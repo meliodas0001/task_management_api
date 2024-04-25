@@ -1,6 +1,7 @@
 import { ORMTransactionInstance } from '@domains/database/ORM';
 import { ITasksEntity } from '@domains/database/entities/Tasks/TasksEntity';
 import { ICreateTaskDTO } from '@domains/requests/tasks/tasksCreate';
+import { ITasksUpdate } from '@domains/requests/tasks/tasksUpdate';
 
 export abstract class ITasksRepository {
   public abstract createTask(
@@ -24,7 +25,7 @@ export abstract class ITasksRepository {
   ): Promise<ITasksEntity>;
 
   public abstract updateTask(
-    task: any,
+    task: ITasksUpdate,
     transaction: ORMTransactionInstance,
   ): Promise<void>;
 }

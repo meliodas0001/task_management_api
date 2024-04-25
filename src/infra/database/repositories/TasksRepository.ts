@@ -2,6 +2,7 @@ import { ORMTransactionInstance } from '@domains/database/ORM';
 import { ITasksEntity } from '@domains/database/entities/Tasks/TasksEntity';
 import { ITasksRepository } from '@domains/database/repositories/TasksRepository/ITasksRepository';
 import { ICreateTaskDTO } from '@domains/requests/tasks/tasksCreate';
+import { ITasksUpdate } from '@domains/requests/tasks/tasksUpdate';
 
 export class TasksRepository implements ITasksRepository {
   public async deleteTask(
@@ -36,11 +37,23 @@ export class TasksRepository implements ITasksRepository {
       },
     });
   }
-  public updateTask(
-    task: any,
+  public async updateTask(
+    task: ITasksUpdate,
     transaction: ORMTransactionInstance,
   ): Promise<void> {
-    throw new Error('Method not implemented.');
+    const { id, description, folderId, status, title } = task;
+
+    await transaction.tasks.update({
+      where: {
+        id,
+      },
+      data: {
+        description,
+        folderId,
+        status,
+        name: title,
+      },
+    });
   }
 
   public async createTask(

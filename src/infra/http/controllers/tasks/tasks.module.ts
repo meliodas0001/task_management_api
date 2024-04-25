@@ -5,6 +5,7 @@ import { TasksController } from './tasks.controller';
 import { TaskCreateService } from '@app/useCases/tasks/taskCreate.service';
 import { TaskDeleteService } from '@app/useCases/tasks/taskDelete.service';
 import { TaskFindManyService } from '@app/useCases/tasks/taskFindMany.service';
+import { TaskUpdateService } from '@app/useCases/tasks/taskUpdate.service';
 
 @Module({
   controllers: [TasksController],
@@ -13,6 +14,7 @@ import { TaskFindManyService } from '@app/useCases/tasks/taskFindMany.service';
     TaskCreateService,
     TaskDeleteService,
     TaskFindManyService,
+    TaskUpdateService,
   ],
   imports: [DatabaseModule],
 })
