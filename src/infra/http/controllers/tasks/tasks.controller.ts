@@ -21,9 +21,11 @@ import { ValidatorPipe } from '@app/utils/validators/pipes/validatorPipes';
 import { AuthGuard } from '@app/services/auth/auth.guard';
 
 import { FindManyTasksSchema } from '@app/utils/validators/schemas/Tasks/findMany';
+import { UpdateTaskSchema } from '@app/utils/validators/schemas/Tasks/updateTask';
 import { CreateTaskSchema } from '@app/utils/validators/schemas/Tasks/createTask';
 import { DeleteTaskSchema } from '@app/utils/validators/schemas/Tasks/deleteTask';
 import { ICreateTaskDTO } from '@domains/requests/tasks/tasksCreate';
+import { ITasksUpdate } from '@domains/requests/tasks/tasksUpdate';
 
 @Controller('containers/folders/tasks')
 export class TasksController {
@@ -95,7 +97,7 @@ export class TasksController {
   @Put('update')
   @UseGuards(AuthGuard)
   async updateTask(
-    @Body() body: any,
+    @Body(new ValidatorPipe(UpdateTaskSchema)) body: ITasksUpdate,
     @Req() req: Request,
     @Res() res: Response,
   ) {
