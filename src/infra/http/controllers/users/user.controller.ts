@@ -5,7 +5,9 @@ import { ValidatorPipe } from '@app/utils/validators/pipes/validatorPipes';
 import { UserService } from '@app/services/user/user.service';
 import { PrismaService } from '../../../database/prisma.service';
 import { IUserCreate } from '@domains/requests/users/users';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('users')
 @Controller('users')
 export class UserController {
   constructor(
@@ -13,8 +15,8 @@ export class UserController {
     private prismaService: PrismaService,
   ) {}
 
-  @Get('/:id')
-  getUserById(@Param('id') id: string) {
+  @Get('/:userId')
+  getUserById(@Param('userId') id: string) {
     return `This action returns a #${id} user`;
   }
 
