@@ -1,11 +1,7 @@
+import { IDeleteTask } from '@domains/requests/tasks/tasksDelete';
 import * as Joi from 'joi';
 
-interface DeleteTaskDTO {
-  containerId: string;
-  taskId: string;
-}
-
-export const DeleteTaskSchema = Joi.object<DeleteTaskDTO>({
+export const DeleteTaskSchema = Joi.object<IDeleteTask>({
   containerId: Joi.string().required(),
   taskId: Joi.string().required(),
 });

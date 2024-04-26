@@ -1,9 +1,6 @@
+import { IFindMany } from '@domains/requests/tasks/tasksFindMany';
 import * as Joi from 'joi';
 
-interface IFindManyDTO {
-  folderId: string;
-}
-
-export const FindManyTasksSchema = Joi.object<IFindManyDTO>({
+export const FindManyTasksSchema = Joi.object<IFindMany>({
   folderId: Joi.string().required(),
 });

@@ -10,6 +10,8 @@ import {
   Get,
   Put,
 } from '@nestjs/common';
+import { Roles as RolesEnum } from '@prisma/client';
+import { ApiTags } from '@nestjs/swagger';
 
 import { TaskFindManyService } from '@app/useCases/tasks/taskFindMany.service';
 import { TaskDeleteService } from '@app/useCases/tasks/taskDelete.service';
@@ -28,8 +30,11 @@ import { ICreateTaskDTO } from '@domains/requests/tasks/tasksCreate';
 import { ITasksUpdate } from '@domains/requests/tasks/tasksUpdate';
 import { RolesGuard } from '@app/services/roles/roles.guard';
 import { Roles } from '@app/decorators/roles.decorator';
-import { Roles as RolesEnum } from '@prisma/client';
 
+import { IDeleteTask } from '@domains/requests/tasks/tasksDelete';
+import { IFindMany } from '@domains/requests/tasks/tasksFindMany';
+
+@ApiTags('Tasks')
 @Controller('containers/folders/tasks')
 export class TasksController {
   constructor(
@@ -69,8 +74,7 @@ export class TasksController {
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(RolesEnum.Admin, RolesEnum.Moderator)
   async deleteTask(
-    @Body(new ValidatorPipe(DeleteTaskSchema)) body: any,
-    @Req() req: Request,
+    @Body(new ValidatorPipe(DeleteTaskSchema)) body: IDeleteTask,
     @Res() res: Response,
   ) {
     const { taskId } = body;
@@ -85,8 +89,7 @@ export class TasksController {
   @Get('findMany')
   @UseGuards(AuthGuard)
   async findManyTasks(
-    @Body(new ValidatorPipe(FindManyTasksSchema)) body: any,
-    @Req() req: Request,
+    @Body(new ValidatorPipe(FindManyTasksSchema)) body: IFindMany,
     @Res() res: Response,
   ) {
     await this.prismaService.$transaction(async (transaction) => {
@@ -104,7 +107,6 @@ export class TasksController {
   @Roles(RolesEnum.Moderator, RolesEnum.Admin)
   async updateTask(
     @Body(new ValidatorPipe(UpdateTaskSchema)) body: ITasksUpdate,
-    @Req() req: Request,
     @Res() res: Response,
   ) {
     await this.prismaService.$transaction(async (transaction) => {
