@@ -20,7 +20,7 @@ import { TaskUpdateService } from '@app/useCases/tasks/taskUpdate.service';
 import { PrismaService } from '@infra/database/prisma.service';
 
 import { ValidatorPipe } from '@app/utils/validators/pipes/validatorPipes';
-import { AuthGuard } from '@app/services/auth/auth.guard';
+import { AuthGuard } from '@app/guards/auth.guard';
 
 import { FindManyTasksSchema } from '@app/utils/validators/schemas/Tasks/findMany';
 import { UpdateTaskSchema } from '@app/utils/validators/schemas/Tasks/updateTask';
@@ -28,7 +28,7 @@ import { CreateTaskSchema } from '@app/utils/validators/schemas/Tasks/createTask
 import { DeleteTaskSchema } from '@app/utils/validators/schemas/Tasks/deleteTask';
 import { ICreateTaskDTO } from '@domains/requests/tasks/tasksCreate';
 import { ITasksUpdate } from '@domains/requests/tasks/tasksUpdate';
-import { RolesGuard } from '@app/services/roles/roles.guard';
+import { RolesGuard } from '@app/guards/roles.guard';
 import { Roles } from '@app/decorators/roles.decorator';
 
 import { IDeleteTask } from '@domains/requests/tasks/tasksDelete';

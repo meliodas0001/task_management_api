@@ -1,7 +1,7 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Roles } from '@prisma/client';
-import { RolesPermissionService } from './rolesPermission.service';
+import { RolesPermissionService } from '../services/roles/rolesPermission.service';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()

@@ -1,4 +1,4 @@
-import { AuthGuard } from '@app/services/auth/auth.guard';
+import { AuthGuard } from '@app/guards/auth.guard';
 import { AuthService } from '@app/services/auth/auth.service';
 import { ValidatorPipe } from '@app/utils/validators/pipes/validatorPipes';
 import { AuthLoginSchema } from '@app/utils/validators/schemas/Auth/authLogin';

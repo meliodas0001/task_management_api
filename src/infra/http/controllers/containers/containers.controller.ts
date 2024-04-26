@@ -13,7 +13,7 @@ import { Request, Response } from 'express';
 
 import { ValidatorPipe } from '@app/utils/validators/pipes/validatorPipes';
 import { PrismaService } from '@infra/database/prisma.service';
-import { AuthGuard } from '@app/services/auth/auth.guard';
+import { AuthGuard } from '@app/guards/auth.guard';
 
 import {
   AddUserContainerSchema,
@@ -33,7 +33,7 @@ import { FindManyContainersService } from '@app/useCases/container/findManyConta
 import { GetContainerByIdService } from '@app/useCases/container/getContainerById.service';
 import { UpdateUserRolesService } from '@app/useCases/container/updateUserRole.service';
 import { DeleteContainerSchema } from '@app/utils/validators/schemas/Container/deleteContainer';
-import { RolesGuard } from '@app/services/roles/roles.guard';
+import { RolesGuard } from '@app/guards/roles.guard';
 import { Roles } from '@app/decorators/roles.decorator';
 import { Roles as roles } from '@prisma/client';
 import { ApiTags } from '@nestjs/swagger';

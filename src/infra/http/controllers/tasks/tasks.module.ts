@@ -6,7 +6,7 @@ import { TaskCreateService } from '@app/useCases/tasks/taskCreate.service';
 import { TaskDeleteService } from '@app/useCases/tasks/taskDelete.service';
 import { TaskFindManyService } from '@app/useCases/tasks/taskFindMany.service';
 import { TaskUpdateService } from '@app/useCases/tasks/taskUpdate.service';
-import { RolesGuard } from '@app/services/roles/roles.guard';
+import { RolesGuard } from '@app/guards/roles.guard';
 import { RolesPermissionService } from '@app/services/roles/rolesPermission.service';
 
 @Module({

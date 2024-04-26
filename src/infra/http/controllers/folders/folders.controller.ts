@@ -25,8 +25,8 @@ import { FindManyFoldersService } from '@app/useCases/folders/findManyFolders.se
 import { DeleteFolderService } from '@app/useCases/folders/deleteFolder.service';
 import { UpdateFolderService } from '@app/useCases/folders/updateFolder.service';
 import { PrismaService } from '@infra/database/prisma.service';
-import { AuthGuard } from '@app/services/auth/auth.guard';
-import { RolesGuard } from '@app/services/roles/roles.guard';
+import { AuthGuard } from '@app/guards/auth.guard';
+import { RolesGuard } from '@app/guards/roles.guard';
 import { Roles as roles } from '@prisma/client';
 import { Roles } from '@app/decorators/roles.decorator';
 import { ApiTags } from '@nestjs/swagger';
