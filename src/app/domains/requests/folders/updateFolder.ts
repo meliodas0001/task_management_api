@@ -1,5 +1,5 @@
 export interface IUpdateFolder {
-  containerId: string;
+  containerId?: string;
   id: string;
   name: string;
   description: string;

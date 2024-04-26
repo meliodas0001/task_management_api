@@ -41,7 +41,8 @@ export class TasksController {
   ) {}
 
   @Post('create')
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(RolesEnum.Admin, RolesEnum.Moderator)
   async createTask(
     @Body(new ValidatorPipe(CreateTaskSchema)) body: ICreateTaskDTO,
     @Req() req: Request,
@@ -65,7 +66,8 @@ export class TasksController {
   }
 
   @Delete('delete')
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(RolesEnum.Admin, RolesEnum.Moderator)
   async deleteTask(
     @Body(new ValidatorPipe(DeleteTaskSchema)) body: any,
     @Req() req: Request,
@@ -81,8 +83,7 @@ export class TasksController {
   }
 
   @Get('findMany')
-  @UseGuards(RolesGuard, AuthGuard)
-  @Roles(RolesEnum.Moderator, RolesEnum.Admin)
+  @UseGuards(AuthGuard)
   async findManyTasks(
     @Body(new ValidatorPipe(FindManyTasksSchema)) body: any,
     @Req() req: Request,
@@ -99,7 +100,8 @@ export class TasksController {
   }
 
   @Put('update')
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(RolesEnum.Moderator, RolesEnum.Admin)
   async updateTask(
     @Body(new ValidatorPipe(UpdateTaskSchema)) body: ITasksUpdate,
     @Req() req: Request,

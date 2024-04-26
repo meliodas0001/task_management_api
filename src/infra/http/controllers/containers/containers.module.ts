@@ -9,6 +9,7 @@ import { DeleteContainerService } from '@app/useCases/container/deleteContainer.
 import { FindManyContainersService } from '@app/useCases/container/findManyContainers.service';
 import { GetContainerByIdService } from '@app/useCases/container/getContainerById.service';
 import { UpdateUserRolesService } from '@app/useCases/container/updateUserRole.service';
+import { RolesPermissionService } from '@app/services/roles/rolesPermission.service';
 
 @Module({
   controllers: [ContainerController],
@@ -20,6 +21,7 @@ import { UpdateUserRolesService } from '@app/useCases/container/updateUserRole.s
     GetContainerByIdService,
     UpdateUserRolesService,
     PrismaService,
+    RolesPermissionService,
   ],
   imports: [DatabaseModule],
 })

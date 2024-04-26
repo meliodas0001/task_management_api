@@ -26,6 +26,9 @@ import { DeleteFolderService } from '@app/useCases/folders/deleteFolder.service'
 import { UpdateFolderService } from '@app/useCases/folders/updateFolder.service';
 import { PrismaService } from '@infra/database/prisma.service';
 import { AuthGuard } from '@app/services/auth/auth.guard';
+import { RolesGuard } from '@app/services/roles/roles.guard';
+import { Roles as roles } from '@prisma/client';
+import { Roles } from '@app/decorators/roles.decorator';
 
 @Controller('containers/folders')
 export class FoldersController {
@@ -38,7 +41,8 @@ export class FoldersController {
   ) {}
 
   @Post('create')
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(roles.Admin, roles.Moderator)
   async createFolder(
     @Body(new ValidatorPipe(FoldersCreateSchema)) body: any,
     @Req() req: Request,
@@ -62,7 +66,8 @@ export class FoldersController {
   }
 
   @Delete('delete')
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(roles.Admin, roles.Moderator)
   async deleteFolder(
     @Body(new ValidatorPipe(DeleteFolderSchema)) body: any,
     @Req() req: Request,
@@ -93,7 +98,8 @@ export class FoldersController {
   }
 
   @Put('update')
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(roles.Admin, roles.Moderator)
   async updateFolder(
     @Body(new ValidatorPipe(UpdateFolderSchema)) body: IUpdateFolder,
     @Req() req: Request,

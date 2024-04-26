@@ -6,6 +6,7 @@ import { CreateFolderService } from '@app/useCases/folders/createFolder.service'
 import { DeleteFolderService } from '@app/useCases/folders/deleteFolder.service';
 import { FindManyFoldersService } from '@app/useCases/folders/findManyFolders.service';
 import { UpdateFolderService } from '@app/useCases/folders/updateFolder.service';
+import { RolesPermissionService } from '@app/services/roles/rolesPermission.service';
 
 @Module({
   controllers: [FoldersController],
@@ -15,6 +16,7 @@ import { UpdateFolderService } from '@app/useCases/folders/updateFolder.service'
     DeleteFolderService,
     FindManyFoldersService,
     UpdateFolderService,
+    RolesPermissionService,
   ],
   imports: [DatabaseModule],
 })

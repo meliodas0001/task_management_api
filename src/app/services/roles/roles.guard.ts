@@ -30,6 +30,10 @@ export class RolesGuard implements CanActivate {
       request.body.containerId,
     );
 
+    if (!userRoles) {
+      return false;
+    }
+
     return requiredRoles.some((role) => userRoles[0].name === role);
   }
 }

@@ -33,6 +33,9 @@ import { FindManyContainersService } from '@app/useCases/container/findManyConta
 import { GetContainerByIdService } from '@app/useCases/container/getContainerById.service';
 import { UpdateUserRolesService } from '@app/useCases/container/updateUserRole.service';
 import { DeleteContainerSchema } from '@app/utils/validators/schemas/Container/deleteContainer';
+import { RolesGuard } from '@app/services/roles/roles.guard';
+import { Roles } from '@app/decorators/roles.decorator';
+import { Roles as roles } from '@prisma/client';
 
 @Controller('containers')
 export class ContainerController {
@@ -103,7 +106,8 @@ export class ContainerController {
   }
 
   @Put('add/user')
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(roles.Admin)
   async addUserToContainer(
     @Body(new ValidatorPipe(AddUserContainerSchema)) body: IAddUserToContainer,
     @Req() req: Request,
@@ -122,6 +126,7 @@ export class ContainerController {
 
   @Put('update/user/role')
   @UseGuards(AuthGuard)
+  @Roles(roles.Admin, roles.Moderator)
   async updateUserRole(
     @Body(new ValidatorPipe(UpdateUserRoleSchema)) body: IAddUserToContainer,
   ) {
