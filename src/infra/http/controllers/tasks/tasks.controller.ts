@@ -26,6 +26,9 @@ import { CreateTaskSchema } from '@app/utils/validators/schemas/Tasks/createTask
 import { DeleteTaskSchema } from '@app/utils/validators/schemas/Tasks/deleteTask';
 import { ICreateTaskDTO } from '@domains/requests/tasks/tasksCreate';
 import { ITasksUpdate } from '@domains/requests/tasks/tasksUpdate';
+import { RolesGuard } from '@app/services/roles/roles.guard';
+import { Roles } from '@app/decorators/roles.decorator';
+import { Roles as RolesEnum } from '@prisma/client';
 
 @Controller('containers/folders/tasks')
 export class TasksController {
@@ -78,7 +81,8 @@ export class TasksController {
   }
 
   @Get('findMany')
-  @UseGuards(AuthGuard)
+  @UseGuards(RolesGuard, AuthGuard)
+  @Roles(RolesEnum.Moderator, RolesEnum.Admin)
   async findManyTasks(
     @Body(new ValidatorPipe(FindManyTasksSchema)) body: any,
     @Req() req: Request,

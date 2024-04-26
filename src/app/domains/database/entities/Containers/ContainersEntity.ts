@@ -1,4 +1,5 @@
 import { UserDTO } from '../User/UserEntity';
+import { Role } from '@prisma/client';
 
 export interface ContainersEntity {
   id: string;

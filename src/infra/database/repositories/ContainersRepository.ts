@@ -5,6 +5,7 @@ import {
 import { ORMTransactionInstance } from '@domains/database/ORM';
 import { IContainersRepository } from '@domains/database/repositories/ContainersRepository/IContainersRepository';
 import { IContainerCreate } from '@domains/requests/container/container';
+import { IGetAllContainers } from '@domains/requests/container/getAllContainers';
 import { Roles } from '@prisma/client';
 
 export class ContainersRepository extends IContainersRepository {
@@ -41,13 +42,17 @@ export class ContainersRepository extends IContainersRepository {
   public async getAllContainers(
     userId: string,
     transaction: ORMTransactionInstance,
-  ): Promise<ContainersEntity[]> {
+  ): Promise<IGetAllContainers[]> {
     const { containers } = await transaction.user.findFirst({
       where: {
         id: userId,
       },
       include: {
-        containers: true,
+        containers: {
+          include: {
+            roles: true,
+          },
+        },
       },
     });
 

@@ -4,6 +4,7 @@ import {
   ContainersFindById,
 } from '@domains/database/entities/Containers/ContainersEntity';
 import { IContainerCreate } from '@domains/requests/container/container';
+import { IGetAllContainers } from '@domains/requests/container/getAllContainers';
 import { Roles } from '@prisma/client';
 
 export abstract class IContainersRepository {
@@ -16,7 +17,7 @@ export abstract class IContainersRepository {
   public abstract getAllContainers(
     userId: string,
     transaction: ORMTransactionInstance,
-  ): Promise<ContainersEntity[]>;
+  ): Promise<IGetAllContainers[]>;
 
   public abstract deleteContainer(
     containerId: string,
