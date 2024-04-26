@@ -10,6 +10,7 @@ async function bootstrap() {
     .setDescription('Manage your tasks')
     .setVersion('1.0')
     .addTag('tasks')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

@@ -9,6 +9,13 @@ import {
   Res,
   Delete,
 } from '@nestjs/common';
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Request, Response } from 'express';
 
 import { ValidatorPipe } from '@app/utils/validators/pipes/validatorPipes';
@@ -36,10 +43,13 @@ import { DeleteContainerSchema } from '@app/utils/validators/schemas/Container/d
 import { RolesGuard } from '@app/guards/roles.guard';
 import { Roles } from '@app/decorators/roles.decorator';
 import { Roles as roles } from '@prisma/client';
-import { ApiTags } from '@nestjs/swagger';
+
 import { IDeleteContainer } from '@domains/requests/container/deleteContainer';
+import { IFindContainerByIdResponse } from '@domains/responses/containers/findContainerById';
 
 @ApiTags('Containers')
+@ApiBearerAuth()
+@UseGuards(AuthGuard)
 @Controller('containers')
 export class ContainerController {
   constructor(
@@ -53,7 +63,19 @@ export class ContainerController {
   ) {}
 
   @Get('find/:containerId')
-  @UseGuards(AuthGuard)
+  @ApiParam({
+    name: 'containerId',
+    required: true,
+    type: 'string',
+  })
+  @ApiResponse({
+    type: IFindContainerByIdResponse,
+    status: 200,
+  })
+  @ApiBadRequestResponse({
+    description: 'Container not found or user does not have access to it.',
+    status: 401,
+  })
   async getContainerById(@Req() req: Request, @Res() res: Response) {
     await this.prismaService.$transaction(async (transaction) => {
       const container = await this.getContainerByIdService.execute(
@@ -67,7 +89,6 @@ export class ContainerController {
   }
 
   @Delete('delete')
-  @UseGuards(AuthGuard)
   async deleteContainer(
     @Body(new ValidatorPipe(DeleteContainerSchema)) body: IDeleteContainer,
     @Req() req: Request,
@@ -85,7 +106,6 @@ export class ContainerController {
   }
 
   @Post('create')
-  @UseGuards(AuthGuard)
   async createContainer(
     @Body(new ValidatorPipe(CreateContainerSchema)) body: IContainerCreate,
     @Req() Req: Request,
@@ -96,7 +116,6 @@ export class ContainerController {
   }
 
   @Get('all')
-  @UseGuards(AuthGuard)
   async getAllUserContainers(@Req() req: Request, @Res() res: Response) {
     await this.prismaService.$transaction(async (transaction) => {
       const containers = await this.findManyContainersService.execute(
@@ -109,11 +128,10 @@ export class ContainerController {
   }
 
   @Put('add/user')
-  @UseGuards(AuthGuard, RolesGuard)
+  @UseGuards(RolesGuard)
   @Roles(roles.Admin)
   async addUserToContainer(
     @Body(new ValidatorPipe(AddUserContainerSchema)) body: IAddUserToContainer,
-    @Req() req: Request,
   ) {
     await this.prismaService.$transaction(async (transaction) => {
       const { containerId, userId, userRole } = body;
@@ -128,7 +146,7 @@ export class ContainerController {
   }
 
   @Put('update/user/role')
-  @UseGuards(AuthGuard)
+  @UseGuards(RolesGuard)
   @Roles(roles.Admin, roles.Moderator)
   async updateUserRole(
     @Body(new ValidatorPipe(UpdateUserRoleSchema)) body: IAddUserToContainer,

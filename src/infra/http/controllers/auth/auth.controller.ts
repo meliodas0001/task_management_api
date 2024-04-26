@@ -2,11 +2,11 @@ import { AuthGuard } from '@app/guards/auth.guard';
 import { AuthService } from '@app/services/auth/auth.service';
 import { ValidatorPipe } from '@app/utils/validators/pipes/validatorPipes';
 import { AuthLoginSchema } from '@app/utils/validators/schemas/Auth/authLogin';
-import { ILogin } from '@domains/requests/auth/login';
+import { ILogin, ILoginResponse } from '@domains/requests/auth/login';
 import { PrismaService } from '@infra/database/prisma.service';
 import { Body, Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -17,6 +17,11 @@ export class AuthController {
   ) {}
 
   @Post('/login')
+  @ApiResponse({
+    status: 200,
+    description: 'Login',
+    type: ILoginResponse,
+  })
   async login(
     @Body(new ValidatorPipe(AuthLoginSchema)) body: ILogin,
     @Res() res: Response,

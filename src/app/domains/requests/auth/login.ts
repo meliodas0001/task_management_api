@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiResponseProperty } from '@nestjs/swagger';
 
 export abstract class ILogin {
   @ApiProperty({
@@ -12,4 +12,11 @@ export abstract class ILogin {
     example: '12345678',
   })
   public password: string;
+}
+
+export abstract class ILoginResponse {
+  @ApiResponseProperty({
+    type: 'jwt',
+  })
+  public access_token: string;
 }
