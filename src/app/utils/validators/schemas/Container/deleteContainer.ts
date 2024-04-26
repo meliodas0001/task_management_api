@@ -1,8 +1,6 @@
 import * as Joi from 'joi';
 
-interface IDeleteContainer {
-  containerId: string;
-}
+import { IDeleteContainer } from '@domains/requests/container/deleteContainer';
 
 export const DeleteContainerSchema = Joi.object<IDeleteContainer>({
   containerId: Joi.string().required(),

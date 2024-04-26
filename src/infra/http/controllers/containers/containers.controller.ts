@@ -36,7 +36,10 @@ import { DeleteContainerSchema } from '@app/utils/validators/schemas/Container/d
 import { RolesGuard } from '@app/services/roles/roles.guard';
 import { Roles } from '@app/decorators/roles.decorator';
 import { Roles as roles } from '@prisma/client';
+import { ApiTags } from '@nestjs/swagger';
+import { IDeleteContainer } from '@domains/requests/container/deleteContainer';
 
+@ApiTags('Containers')
 @Controller('containers')
 export class ContainerController {
   constructor(
@@ -49,12 +52,12 @@ export class ContainerController {
     private readonly updateUserRolesService: UpdateUserRolesService,
   ) {}
 
-  @Get('find/:id')
+  @Get('find/:containerId')
   @UseGuards(AuthGuard)
   async getContainerById(@Req() req: Request, @Res() res: Response) {
     await this.prismaService.$transaction(async (transaction) => {
       const container = await this.getContainerByIdService.execute(
-        req.params.id,
+        req.params.containerId,
         req.user.id,
         transaction,
       );
@@ -66,7 +69,7 @@ export class ContainerController {
   @Delete('delete')
   @UseGuards(AuthGuard)
   async deleteContainer(
-    @Body(new ValidatorPipe(DeleteContainerSchema)) body: any,
+    @Body(new ValidatorPipe(DeleteContainerSchema)) body: IDeleteContainer,
     @Req() req: Request,
     @Res() res: Response,
   ) {

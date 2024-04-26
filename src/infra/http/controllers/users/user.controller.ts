@@ -7,7 +7,7 @@ import { PrismaService } from '../../../database/prisma.service';
 import { IUserCreate } from '@domains/requests/users/users';
 import { ApiTags } from '@nestjs/swagger';
 
-@ApiTags('users')
+@ApiTags('Users')
 @Controller('users')
 export class UserController {
   constructor(
