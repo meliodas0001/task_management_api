@@ -32,6 +32,7 @@ import { DeleteContainerService } from '@app/useCases/container/deleteContainer.
 import { FindManyContainersService } from '@app/useCases/container/findManyContainers.service';
 import { GetContainerByIdService } from '@app/useCases/container/getContainerById.service';
 import { UpdateUserRolesService } from '@app/useCases/container/updateUserRole.service';
+import { DeleteContainerSchema } from '@app/utils/validators/schemas/Container/deleteContainer';
 
 @Controller('containers')
 export class ContainerController {
@@ -59,12 +60,16 @@ export class ContainerController {
     });
   }
 
-  @Delete('delete/:id')
+  @Delete('delete')
   @UseGuards(AuthGuard)
-  async deleteContainer(@Req() req: Request, @Res() res: Response) {
+  async deleteContainer(
+    @Body(new ValidatorPipe(DeleteContainerSchema)) body: any,
+    @Req() req: Request,
+    @Res() res: Response,
+  ) {
     await this.prismaService.$transaction(async (transaction) => {
       await this.deleteContainerService.execute(
-        req.params.id,
+        body.containerId,
         req.user.id,
         transaction,
       );
