@@ -29,7 +29,11 @@ import { AuthGuard } from '@app/services/auth/auth.guard';
 import { RolesGuard } from '@app/services/roles/roles.guard';
 import { Roles as roles } from '@prisma/client';
 import { Roles } from '@app/decorators/roles.decorator';
+import { ApiTags } from '@nestjs/swagger';
+import { ICreateFolder } from '@domains/requests/folders/createFolder';
+import { IDeleteFolder } from '@domains/requests/folders/deleteFolder';
 
+@ApiTags('Folders')
 @Controller('containers/folders')
 export class FoldersController {
   constructor(
@@ -44,19 +48,18 @@ export class FoldersController {
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(roles.Admin, roles.Moderator)
   async createFolder(
-    @Body(new ValidatorPipe(FoldersCreateSchema)) body: any,
+    @Body(new ValidatorPipe(FoldersCreateSchema)) body: ICreateFolder,
     @Req() req: Request,
     @Res() res: Response,
   ) {
     await this.prismaService.$transaction(async (transaction) => {
-      const { name, description, containerId, status } = body;
+      const { name, description, containerId } = body;
 
       const folder = {
         name,
         containerId,
         description: description ? description : ' ',
         author: req.user.username,
-        status,
       };
 
       await this.createFolderService.execute(folder, transaction);
@@ -69,7 +72,7 @@ export class FoldersController {
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(roles.Admin, roles.Moderator)
   async deleteFolder(
-    @Body(new ValidatorPipe(DeleteFolderSchema)) body: any,
+    @Body(new ValidatorPipe(DeleteFolderSchema)) body: IDeleteFolder,
     @Req() req: Request,
     @Res() res: Response,
   ) {

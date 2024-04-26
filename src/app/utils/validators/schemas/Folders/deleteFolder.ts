@@ -1,11 +1,8 @@
 import * as Joi from 'joi';
 
-interface IDeleteFolderDTO {
-  containerId: string;
-  folderId: string;
-}
+import { IDeleteFolder } from '@domains/requests/folders/deleteFolder';
 
-export const DeleteFolderSchema = Joi.object<IDeleteFolderDTO>({
+export const DeleteFolderSchema = Joi.object<IDeleteFolder>({
   containerId: Joi.string().required(),
   folderId: Joi.string().required(),
 });
