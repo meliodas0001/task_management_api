@@ -48,6 +48,10 @@ import { Roles as roles } from '@prisma/client';
 
 import { IDeleteContainer } from '@domains/requests/container/deleteContainer';
 import { IFindContainerByIdResponse } from '@domains/responses/containers/findContainerById';
+import {
+  ContainerFindByIdSchema,
+  IContainerFindById,
+} from '@app/utils/validators/schemas/Container/containerFindById';
 
 @ApiTags('Containers')
 @ApiBearerAuth()
@@ -64,12 +68,7 @@ export class ContainerController {
     private readonly updateUserRolesService: UpdateUserRolesService,
   ) {}
 
-  @Get('find/:containerId')
-  @ApiParam({
-    name: 'containerId',
-    required: true,
-    type: 'string',
-  })
+  @Get('findById')
   @ApiResponse({
     type: IFindContainerByIdResponse,
     status: 200,
@@ -78,10 +77,17 @@ export class ContainerController {
     description: 'Container not found or user does not have access to it.',
     status: 401,
   })
-  async getContainerById(@Req() req: Request, @Res() res: Response) {
+  @Roles(roles.User, roles.Admin, roles.Moderator)
+  async getContainerById(
+    @Body(new ValidatorPipe(ContainerFindByIdSchema)) body: IContainerFindById,
+    @Req() req: Request,
+    @Res() res: Response,
+  ) {
+    const { containerId } = body;
+
     await this.prismaService.$transaction(async (transaction) => {
       const container = await this.getContainerByIdService.execute(
-        req.params.containerId,
+        containerId,
         req.user.id,
         transaction,
       );
@@ -91,6 +97,8 @@ export class ContainerController {
   }
 
   @Delete('delete')
+  @UseGuards(RolesGuard)
+  @Roles(roles.Admin)
   async deleteContainer(
     @Body(new ValidatorPipe(DeleteContainerSchema)) body: IDeleteContainer,
     @Req() req: Request,

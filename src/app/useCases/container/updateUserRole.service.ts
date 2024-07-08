@@ -3,6 +3,7 @@ import { IContainersRepository } from '@domains/database/repositories/Containers
 import { ORMTransactionInstance } from '@domains/database/ORM';
 import { Roles } from '@prisma/client';
 
+@Injectable()
 export class UpdateUserRolesService {
   constructor(private readonly containersRepository: IContainersRepository) {}
 
@@ -12,10 +13,14 @@ export class UpdateUserRolesService {
     userRole: string,
     transaction: ORMTransactionInstance,
   ): Promise<void> {
+    console.log(containerId);
+
     const container = await this.containersRepository.findById(
       containerId,
       transaction,
     );
+
+    console.log(container);
 
     if (!container) throw new UnauthorizedException('Container not found');
 
