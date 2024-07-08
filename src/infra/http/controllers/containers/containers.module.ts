@@ -10,6 +10,7 @@ import { FindManyContainersService } from '@app/useCases/container/findManyConta
 import { GetContainerByIdService } from '@app/useCases/container/getContainerById.service';
 import { UpdateUserRolesService } from '@app/useCases/container/updateUserRole.service';
 import { RolesPermissionService } from '@app/services/roles/rolesPermission.service';
+import { UpdateContainerService } from '@app/useCases/container/updateContainer.service';
 
 @Module({
   controllers: [ContainerController],
@@ -22,6 +23,7 @@ import { RolesPermissionService } from '@app/services/roles/rolesPermission.serv
     UpdateUserRolesService,
     PrismaService,
     RolesPermissionService,
+    UpdateContainerService,
   ],
   imports: [DatabaseModule],
 })

@@ -5,7 +5,7 @@ export interface ContainersEntity {
   name: string;
   description: string;
   ownerId: string;
-  public: boolean;
+  isPublic: boolean;
 }
 
 export interface ContainersFindById {
@@ -13,7 +13,7 @@ export interface ContainersFindById {
   name: string;
   description: string;
   ownerId: string;
-  public: boolean;
+  isPublic: boolean;
 
   users: UserDTO[];
 }

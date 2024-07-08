@@ -9,6 +9,6 @@ export interface IGetAllContainers {
   id: string;
   name: string;
   description: string;
-  public: boolean;
+  isPublic: boolean;
   roles: Roles[];
 }

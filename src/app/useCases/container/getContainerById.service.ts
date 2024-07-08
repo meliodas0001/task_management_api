@@ -18,7 +18,7 @@ export class GetContainerByIdService {
 
     if (!container) throw new UnauthorizedException('Container not found');
 
-    if (!container.public) {
+    if (!container.isPublic) {
       let userFind = false;
 
       container.users.forEach((user) => {

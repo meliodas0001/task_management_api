@@ -22,7 +22,7 @@ model Container {
   description String?
   ownerId     String
   roles       Role[]
-  public      Boolean @default(false)
+  isPublic    Boolean @default(false)
 
   users   User[]    @relation("ContainerUsers")
   folders Folders[]

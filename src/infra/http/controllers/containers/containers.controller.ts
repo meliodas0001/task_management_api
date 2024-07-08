@@ -52,6 +52,11 @@ import {
   ContainerFindByIdSchema,
   IContainerFindById,
 } from '@app/utils/validators/schemas/Container/containerFindById';
+import {
+  IUpdateContainerSchema,
+  UpdateContainerSchema,
+} from '@domains/requests/container/updateContainer';
+import { UpdateContainerService } from '@app/useCases/container/updateContainer.service';
 
 @ApiTags('Containers')
 @ApiBearerAuth()
@@ -66,6 +71,7 @@ export class ContainerController {
     private readonly findManyContainersService: FindManyContainersService,
     private readonly getContainerByIdService: GetContainerByIdService,
     private readonly updateUserRolesService: UpdateUserRolesService,
+    private readonly updateContainerService: UpdateContainerService,
   ) {}
 
   @Get('findById')
@@ -171,5 +177,21 @@ export class ContainerController {
         transaction,
       );
     });
+  }
+
+  @Put('update')
+  @UseGuards(RolesGuard)
+  @Roles(roles.Admin)
+  async updateContainer(
+    @Body(new ValidatorPipe(UpdateContainerSchema))
+    body: IUpdateContainerSchema,
+    @Req() req: Request,
+    @Res() res: Response,
+  ) {
+    await this.prismaService.$transaction(async (transaction) => {
+      await this.updateContainerService.execute(body, transaction);
+    });
+
+    res.status(200).send();
   }
 }

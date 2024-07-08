@@ -80,9 +80,9 @@ export class ContainersRepository extends IContainersRepository {
     container: ContainersEntity,
     transaction: ORMTransactionInstance,
   ): Promise<void> {
-    const { id, description, name, ownerId } = container;
+    const { id, description, name, ownerId, isPublic } = container;
 
-    transaction.container.update({
+    await transaction.container.update({
       where: {
         id,
       },
@@ -90,6 +90,7 @@ export class ContainersRepository extends IContainersRepository {
         description,
         name,
         ownerId,
+        isPublic,
       },
     });
   }
