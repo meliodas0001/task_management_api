@@ -10,28 +10,28 @@ import {
   UseGuards,
 } from '@nestjs/common';
 
+import { Roles as roles } from '@prisma/client';
 import { Request, Response } from 'express';
+import { ApiTags } from '@nestjs/swagger';
 
 import { CreateFolderService } from '@app/useCases/folders/createFolder.service';
+import { PrismaService } from '@infra/database/prisma.service';
 
 import { FoldersCreateSchema } from '@app/utils/validators/schemas/Folders/createFolder';
-import { ValidatorPipe } from '@app/utils/validators/pipes/validatorPipes';
-
 import { DeleteFolderSchema } from '@app/utils/validators/schemas/Folders/deleteFolder';
 import { UpdateFolderSchema } from '@app/utils/validators/schemas/Folders/updateFolder';
-import { IUpdateFolder } from '@domains/requests/folders/updateFolder';
+import { ValidatorPipe } from '@app/utils/validators/pipes/validatorPipes';
+
+import { RolesGuard } from '@app/guards/roles.guard';
+import { AuthGuard } from '@app/guards/auth.guard';
 
 import { FindManyFoldersService } from '@app/useCases/folders/findManyFolders.service';
 import { DeleteFolderService } from '@app/useCases/folders/deleteFolder.service';
 import { UpdateFolderService } from '@app/useCases/folders/updateFolder.service';
-import { PrismaService } from '@infra/database/prisma.service';
-import { AuthGuard } from '@app/guards/auth.guard';
-import { RolesGuard } from '@app/guards/roles.guard';
-import { Roles as roles } from '@prisma/client';
-import { Roles } from '@app/decorators/roles.decorator';
-import { ApiTags } from '@nestjs/swagger';
+import { IUpdateFolder } from '@domains/requests/folders/updateFolder';
 import { ICreateFolder } from '@domains/requests/folders/createFolder';
 import { IDeleteFolder } from '@domains/requests/folders/deleteFolder';
+import { Roles } from '@app/decorators/roles.decorator';
 
 @ApiTags('Folders')
 @Controller('containers/folders')

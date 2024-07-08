@@ -30,8 +30,6 @@ export class TaskUpdateService {
       throw new NotFoundException('Folder not found');
     }
 
-    // verify user permission
-
     await this.tasksRepository.updateTask(task, transaction);
   }
 }

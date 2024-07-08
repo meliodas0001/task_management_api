@@ -8,8 +8,6 @@ export class TaskCreateService {
   constructor(private readonly tasksRepository: ITasksRepository) {}
 
   async execute(task: ICreateTaskDTO, transaction: ORMTransactionInstance) {
-    // Verify if user has permission
-
     await this.tasksRepository.createTask(task, transaction);
   }
 }

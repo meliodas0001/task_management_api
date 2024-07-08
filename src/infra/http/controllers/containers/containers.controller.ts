@@ -9,6 +9,7 @@ import {
   Res,
   Delete,
 } from '@nestjs/common';
+
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -16,6 +17,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+
 import { Request, Response } from 'express';
 
 import { ValidatorPipe } from '@app/utils/validators/pipes/validatorPipes';
@@ -147,7 +149,7 @@ export class ContainerController {
 
   @Put('update/user/role')
   @UseGuards(RolesGuard)
-  @Roles(roles.Admin, roles.Moderator)
+  @Roles(roles.Admin)
   async updateUserRole(
     @Body(new ValidatorPipe(UpdateUserRoleSchema)) body: IAddUserToContainer,
   ) {
