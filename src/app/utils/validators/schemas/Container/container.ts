@@ -19,5 +19,5 @@ export const AddUserContainerSchema = Joi.object<IAddUserToContainer>({
 export const UpdateUserRoleSchema = Joi.object<IAddUserToContainer>({
   containerId: Joi.string().required(),
   userId: Joi.string().required(),
-  userRole: Joi.string().required(),
+  userRole: Joi.string().equal('Admin', 'User', 'Moderator').required(),
 });

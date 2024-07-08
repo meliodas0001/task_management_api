@@ -149,8 +149,6 @@ export class ContainersRepository extends IContainersRepository {
     userRole: Roles,
     transaction: ORMTransactionInstance,
   ): Promise<void> {
-    console.log(id, userRole, 'aq bro');
-
     await transaction.role.update({
       where: {
         id,

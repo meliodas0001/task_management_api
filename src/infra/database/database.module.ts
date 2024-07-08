@@ -8,6 +8,8 @@ import { IFoldersRepository } from '@domains/database/repositories/FoldersReposi
 import { FoldersRepository } from './repositories/FoldersRepository';
 import { ITasksRepository } from '@domains/database/repositories/TasksRepository/ITasksRepository';
 import { TasksRepository } from './repositories/TasksRepository';
+import { IRolesRepository } from '@domains/database/repositories/RolesRepository/IRolesRepository';
+import { RolesRepository } from './repositories/RolesRepository';
 
 @Module({
   providers: [
@@ -28,6 +30,10 @@ import { TasksRepository } from './repositories/TasksRepository';
       provide: ITasksRepository,
       useClass: TasksRepository,
     },
+    {
+      provide: IRolesRepository,
+      useClass: RolesRepository,
+    },
   ],
   exports: [
     PrismaService,
@@ -35,6 +41,7 @@ import { TasksRepository } from './repositories/TasksRepository';
     IContainersRepository,
     IFoldersRepository,
     ITasksRepository,
+    IRolesRepository,
   ],
 })
 export class DatabaseModule {}
