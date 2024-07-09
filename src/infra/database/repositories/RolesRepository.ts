@@ -15,4 +15,15 @@ export class RolesRepository implements IRolesRepository {
       },
     });
   }
+
+  public async deleteUserRole(
+    roleId: string,
+    transaction: ORMTransactionInstance,
+  ): Promise<void> {
+    await transaction.role.delete({
+      where: {
+        id: roleId,
+      },
+    });
+  }
 }

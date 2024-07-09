@@ -2,12 +2,14 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { IContainersRepository } from '@domains/database/repositories/ContainersRepository/IContainersRepository';
 import { ORMTransactionInstance } from '@domains/database/ORM';
 import { IUserRepository } from '@domains/database/repositories/UserRepository/IUserRepository';
+import { IRolesRepository } from '@domains/database/repositories/RolesRepository/IRolesRepository';
 
 @Injectable()
 export class RemoveUserFromContainerService {
   constructor(
     private readonly containersRepository: IContainersRepository,
     private readonly usersRepository: IUserRepository,
+    private readonly rolesRepository: IRolesRepository,
   ) {}
 
   async execute(
@@ -34,5 +36,15 @@ export class RemoveUserFromContainerService {
       containerId,
       transaction,
     );
+
+    const userRole = await this.rolesRepository.findRole(
+      userId,
+      containerId,
+      transaction,
+    );
+
+    if (!userRole) return;
+
+    await this.rolesRepository.deleteUserRole(userRole[0].id, transaction);
   }
 }

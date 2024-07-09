@@ -8,4 +8,9 @@ export abstract class IRolesRepository {
     containerId: string,
     transaction: ORMTransactionInstance,
   ): Promise<IRolesEntity[]>;
+
+  public abstract deleteUserRole(
+    roleId: string,
+    transaction: ORMTransactionInstance,
+  ): Promise<void>;
 }
