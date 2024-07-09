@@ -1,6 +1,10 @@
 import { ORMTransactionInstance } from '@domains/database/ORM';
 import { IFoldersRepository } from '@domains/database/repositories/FoldersRepository/IFoldersRepository';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 
 @Injectable()
 export class DeleteFolderService {
@@ -15,11 +19,11 @@ export class DeleteFolderService {
       transaction,
     );
 
-    if (!folder) {
-      throw new NotFoundException('Folder not found');
-    }
+    console.log(folder);
 
-    // TODO: Verify if user has permission to delete the folder
+    if (!folder) {
+      throw new UnauthorizedException('Folder not found');
+    }
 
     await this.folderRepository.deleteFolder(folderId, transaction);
   }
