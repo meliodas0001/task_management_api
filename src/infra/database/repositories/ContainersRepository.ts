@@ -2,10 +2,12 @@ import {
   ContainersEntity,
   ContainersFindById,
 } from '@domains/database/entities/Containers/ContainersEntity';
+import { UserDTO } from '@domains/database/entities/User/UserEntity';
 import { ORMTransactionInstance } from '@domains/database/ORM';
 import { IContainersRepository } from '@domains/database/repositories/ContainersRepository/IContainersRepository';
 import { IContainerCreate } from '@domains/requests/container/container';
 import { IGetAllContainers } from '@domains/requests/container/getAllContainers';
+import { IRemoveUserFromContainer } from '@domains/requests/container/removeUserFromContainer';
 import { Roles } from '@prisma/client';
 
 export class ContainersRepository extends IContainersRepository {
@@ -158,5 +160,28 @@ export class ContainersRepository extends IContainersRepository {
         name: userRole,
       },
     });
+  }
+
+  public async getContainerUsers(
+    containerId: string,
+    transaction: ORMTransactionInstance,
+  ): Promise<IRemoveUserFromContainer> {
+    const users = await transaction.container.findFirst({
+      where: {
+        id: containerId,
+      },
+      select: {
+        ownerId: true,
+        users: {
+          select: {
+            id: true,
+            username: true,
+            email: true,
+          },
+        },
+      },
+    });
+
+    return users;
   }
 }

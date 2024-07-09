@@ -5,6 +5,7 @@ import {
 } from '@domains/database/entities/Containers/ContainersEntity';
 import { IContainerCreate } from '@domains/requests/container/container';
 import { IGetAllContainers } from '@domains/requests/container/getAllContainers';
+import { IRemoveUserFromContainer } from '@domains/requests/container/removeUserFromContainer';
 import { Roles } from '@prisma/client';
 
 export abstract class IContainersRepository {
@@ -46,4 +47,9 @@ export abstract class IContainersRepository {
     userRole: Roles,
     transaction: ORMTransactionInstance,
   ): Promise<void>;
+
+  public abstract getContainerUsers(
+    containerId: string,
+    transaction: ORMTransactionInstance,
+  ): Promise<IRemoveUserFromContainer>;
 }

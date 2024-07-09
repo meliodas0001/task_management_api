@@ -11,6 +11,7 @@ import { GetContainerByIdService } from '@app/useCases/container/getContainerByI
 import { UpdateUserRolesService } from '@app/useCases/container/updateUserRole.service';
 import { RolesPermissionService } from '@app/services/roles/rolesPermission.service';
 import { UpdateContainerService } from '@app/useCases/container/updateContainer.service';
+import { RemoveUserFromContainerService } from '@app/useCases/container/removeUserFromContainer.service';
 
 @Module({
   controllers: [ContainerController],
@@ -24,6 +25,7 @@ import { UpdateContainerService } from '@app/useCases/container/updateContainer.
     PrismaService,
     RolesPermissionService,
     UpdateContainerService,
+    RemoveUserFromContainerService,
   ],
   imports: [DatabaseModule],
 })

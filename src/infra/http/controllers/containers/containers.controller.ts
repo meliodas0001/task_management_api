@@ -8,6 +8,7 @@ import {
   Put,
   Res,
   Delete,
+  Patch,
 } from '@nestjs/common';
 
 import {
@@ -57,6 +58,7 @@ import {
   UpdateContainerSchema,
 } from '@domains/requests/container/updateContainer';
 import { UpdateContainerService } from '@app/useCases/container/updateContainer.service';
+import { RemoveUserFromContainerService } from '@app/useCases/container/removeUserFromContainer.service';
 
 @ApiTags('Containers')
 @ApiBearerAuth()
@@ -72,6 +74,7 @@ export class ContainerController {
     private readonly getContainerByIdService: GetContainerByIdService,
     private readonly updateUserRolesService: UpdateUserRolesService,
     private readonly updateContainerService: UpdateContainerService,
+    private readonly removeUserFromContainerService: RemoveUserFromContainerService,
   ) {}
 
   @Get('findById')
@@ -190,6 +193,27 @@ export class ContainerController {
   ) {
     await this.prismaService.$transaction(async (transaction) => {
       await this.updateContainerService.execute(body, transaction);
+    });
+
+    res.status(200).send();
+  }
+
+  @Patch('remove/user')
+  @UseGuards(RolesGuard)
+  @Roles(roles.Admin)
+  async removeUserFromContainer(
+    @Body() body: any,
+    @Req() req: Request,
+    @Res() res: Response,
+  ) {
+    const { userId, containerId } = body;
+
+    await this.prismaService.$transaction(async (transaction) => {
+      await this.removeUserFromContainerService.execute(
+        userId,
+        containerId,
+        transaction,
+      );
     });
 
     res.status(200).send();

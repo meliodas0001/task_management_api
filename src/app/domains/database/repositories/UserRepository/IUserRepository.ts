@@ -16,4 +16,10 @@ export abstract class IUserRepository {
     email: string,
     transaction: ORMTransactionInstance,
   ): Promise<UserEntity>;
+
+  public abstract removeUserFromContainer(
+    userId: string,
+    containerId: string,
+    transaction: ORMTransactionInstance,
+  ): Promise<void>;
 }

@@ -2,7 +2,7 @@ import { UserEntity } from '@domains/database/entities/User/UserEntity';
 import { IUserRepository } from '@domains/database/repositories/UserRepository/IUserRepository';
 import { ORMTransactionInstance } from 'src/app/domains/database/ORM';
 
-export class UserRepository extends IUserRepository {
+export class UserRepository implements IUserRepository {
   public async createUser(
     user: UserEntity,
     transaction: ORMTransactionInstance,
@@ -36,6 +36,25 @@ export class UserRepository extends IUserRepository {
     return transaction.user.findUnique({
       where: {
         id,
+      },
+    });
+  }
+
+  public async removeUserFromContainer(
+    userId: string,
+    containerId: string,
+    transaction: ORMTransactionInstance,
+  ): Promise<void> {
+    await transaction.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        containers: {
+          disconnect: {
+            id: containerId,
+          },
+        },
       },
     });
   }
