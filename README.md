@@ -67,7 +67,7 @@ Para testar as rotas da aplicação você pode usar o arquivo [arquivo de rotas]
 
 ### Rota dos Containers
 
-**Todas requestes da rota Containers deve conter o campo authorization no header para utilizar a request**
+**Todas requests da rota Containers deve conter o campo authorization no header para utilizar a request**
 
 ## Create
 
@@ -228,7 +228,7 @@ Para testar as rotas da aplicação você pode usar o arquivo [arquivo de rotas]
 
 ### Rotas de Folders
 
-**Todas requestes da rota Containers deve conter o campo authorization no header para utilizar a request**
+**Todas requests da rota Containers deve conter o campo authorization no header para utilizar a request**
 
 ## Create Folder
 
@@ -313,7 +313,7 @@ Para testar as rotas da aplicação você pode usar o arquivo [arquivo de rotas]
 
 ### Tasks Routes
 
-**Todas requestes da rota Containers deve conter o campo authorization no header para utilizar a request**
+**Todas requests da rota Containers deve conter o campo authorization no header para utilizar a request**
 
 ## Create Task
 
