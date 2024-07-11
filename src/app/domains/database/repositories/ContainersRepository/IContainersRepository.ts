@@ -4,7 +4,10 @@ import {
   ContainersFindById,
 } from '@domains/database/entities/Containers/ContainersEntity';
 import { IContainerCreate } from '@domains/requests/container/container';
-import { IGetAllContainers } from '@domains/requests/container/getAllContainers';
+import {
+  IFindAllUserContainers,
+  IGetAllContainers,
+} from '@domains/requests/container/getAllContainers';
 import { IRemoveUserFromContainer } from '@domains/requests/container/removeUserFromContainer';
 import { Roles } from '@prisma/client';
 
@@ -52,4 +55,9 @@ export abstract class IContainersRepository {
     containerId: string,
     transaction: ORMTransactionInstance,
   ): Promise<IRemoveUserFromContainer>;
+
+  public abstract findAllUserContainers(
+    userId: string,
+    transaction: ORMTransactionInstance,
+  ): Promise<IFindAllUserContainers[]>;
 }

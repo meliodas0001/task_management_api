@@ -6,7 +6,10 @@ import { UserDTO } from '@domains/database/entities/User/UserEntity';
 import { ORMTransactionInstance } from '@domains/database/ORM';
 import { IContainersRepository } from '@domains/database/repositories/ContainersRepository/IContainersRepository';
 import { IContainerCreate } from '@domains/requests/container/container';
-import { IGetAllContainers } from '@domains/requests/container/getAllContainers';
+import {
+  IFindAllUserContainers,
+  IGetAllContainers,
+} from '@domains/requests/container/getAllContainers';
 import { IRemoveUserFromContainer } from '@domains/requests/container/removeUserFromContainer';
 import { Roles } from '@prisma/client';
 
@@ -45,16 +48,13 @@ export class ContainersRepository extends IContainersRepository {
     userId: string,
     transaction: ORMTransactionInstance,
   ): Promise<IGetAllContainers[]> {
-    const { containers } = await transaction.user.findFirst({
+    const containers = await transaction.container.findMany({
       where: {
-        id: userId,
+        ownerId: userId,
       },
       include: {
-        containers: {
-          include: {
-            roles: true,
-          },
-        },
+        users: false,
+        roles: true,
       },
     });
 
@@ -183,5 +183,22 @@ export class ContainersRepository extends IContainersRepository {
     });
 
     return users;
+  }
+
+  async findAllUserContainers(
+    userId: string,
+    transaction: ORMTransactionInstance,
+  ): Promise<IFindAllUserContainers[]> {
+    const containers = await transaction.container.findMany({
+      where: {
+        ownerId: userId,
+      },
+      include: {
+        users: false,
+        roles: false,
+      },
+    });
+
+    return containers;
   }
 }

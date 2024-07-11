@@ -19,6 +19,6 @@ export class FindManyContainersService {
 
     if (!user) throw new UnauthorizedException('User not found');
 
-    return this.containersRepository.getAllContainers(userId, transaction);
+    return this.containersRepository.findAllUserContainers(userId, transaction);
   }
 }

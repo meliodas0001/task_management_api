@@ -1,13 +1,5 @@
 version: '3.8'
 services:
-  app:
-    network_mode: host
-    build: .
-    restart: always
-    container_name: task_management_api
-    volumes:
-      - .:/animes_api
-
   db:
     container_name: task_management_api_db
     image: postgres:alpine

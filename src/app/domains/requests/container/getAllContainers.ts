@@ -12,3 +12,10 @@ export interface IGetAllContainers {
   isPublic: boolean;
   roles: Roles[];
 }
+
+export interface IFindAllUserContainers {
+  id: string;
+  name: string;
+  description: string;
+  isPublic: boolean;
+}

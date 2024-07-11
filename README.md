@@ -1,73 +1,402 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Task Management Api
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Task Management Api, é uma api simples de gerenciamento de tarefas, parecido com o trello. A aplicação permite a criação de Grupos e de Pastas para gerenciar suas tarefas. E também possuí um gerenciamento de usuários.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+### Iniciar aplicação
 
-## Description
+Crie um arquivo **`.env`** na pasta do projeto, e preencha todas as informações de acordo com o arquivo **`.example.env`**
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Criando Instância de Banco de Dados com Docker
 
-## Installation
+Para iniciar a database com docker é preciso do software docker instalado e configurado em seu computador. Após a instalação do docker, entre na pasta raiz do projeto e execute o comando **`docker-compose up`**
+
+## Criação de tabelas no banco de dados
+
+Para criar todas tabelas no banco de dados utilize o comando **`npm prisma db push`** ou **`yarn prisma db push`**
+
+## Rodando a aplicação
 
 ```bash
-$ yarn install
+yarn start
+# ou
+npm start
 ```
 
-## Running the app
+### Testar rotas da aplicação
 
-```bash
-# development
-$ yarn run start
+Para testar as rotas da aplicação você pode usar o arquivo [arquivo de rotas](./task_management_api-InsomniaAPI) no aplicativo do Insomnia.
 
-# watch mode
-$ yarn run start:dev
+### Create
 
-# production mode
-$ yarn run start:prod
+| Rota              | Tipo de requisição |
+| ----------------- | ------------------ |
+| **`auth/create`** | **`Post`**         |
+
+**Exemplo de requisição**
+
+| Campo          | Tipo         | Descrição        |
+| -------------- | ------------ | ---------------- |
+| **`username`** | **`String`** | Nome do usuário  |
+| **`password`** | **`String`** | Senha do usuário |
+| **`email`**    | **`String`** | Email do usuário |
+
+**Tipo de retorno**
+
+201 - Created
+
+## Login
+
+| Rota             | Tipo de requisição |
+| ---------------- | ------------------ |
+| **`auth/login`** | **`Post`**         |
+
+**Exemplo de requisição**
+
+| Campo          | Tipo         | Descrição        |
+| -------------- | ------------ | ---------------- |
+| **`email`**    | **`String`** | Email do usuário |
+| **`password`** | **`String`** | Senha do usuário |
+
+**Tipo de retorno**
+
+```json
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5kb2VAZW1haWwuY29tIiwidXNlcm5hbWUiOiJKb2huIERvZSIsImlkIjoiMGI3NzY4MDMtOWM0My00NWFlLThmY2QtYTQ3MTY5NDBjMTAyIiwiaWF0IjoxNzIwNzE2MDMwfQ.aflGUj-tnTWMvOmWGD4etxhJCeN0eqVrhJ8rKwmFktc"
+}
 ```
 
-## Test
+### Rota dos Containers
 
-```bash
-# unit tests
-$ yarn run test
+**Todas requestes da rota Containers deve conter o campo authorization no header para utilizar a request**
 
-# e2e tests
-$ yarn run test:e2e
+## Create
 
-# test coverage
-$ yarn run test:cov
+| Rota                    | Tipo de requisição |
+| ----------------------- | ------------------ |
+| **`containers/create`** | **`Post`**         |
+
+**Exemplo de requisição**
+
+| Campo             | Tipo         | Descrição              |
+| ----------------- | ------------ | ---------------------- |
+| **`name`**        | **`String`** | Nome do container      |
+| **`description`** | **`String`** | Descrição do container |
+
+**Tipo de retorno**
+
+201 - Created
+
+## Get All User Containers
+
+| Rota                 | Tipo de requisição |
+| -------------------- | ------------------ |
+| **`containers/all`** | **`GET`**          |
+
+**Para a realização da request é necessário somente o campo authorization no header com o token jwt**
+
+**Tipo de retorno**
+
+```json
+[
+  {
+    "id": "c87561f2-2a1c-4d12-900d-3ff2291d2c33",
+    "name": "Container atualizado",
+    "description": "Descrição atualizada",
+    "ownerId": "0b776803-9c43-45ae-8fcd-a4716940c102",
+    "isPublic": true
+  }
+]
 ```
 
-## Support
+## Find Container By Id
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+| Rota                      | Tipo de requisição |
+| ------------------------- | ------------------ |
+| **`containers/findById`** | **`GET`**          |
 
-## Stay in touch
+**Exemplo de requisição**
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+| Campo             | Tipo         | Descrição       |
+| ----------------- | ------------ | --------------- |
+| **`containerId`** | **`String`** | Id do container |
 
-## License
+**Tipo de retorno**
 
-Nest is [MIT licensed](LICENSE).
+```json
+{
+  "id": "c87561f2-2a1c-4d12-900d-3ff2291d2c33",
+  "name": "Container atualizado",
+  "description": "Descrição atualizada",
+  "ownerId": "0b776803-9c43-45ae-8fcd-a4716940c102",
+  "isPublic": true,
+  "users": [
+    {
+      "id": "0b776803-9c43-45ae-8fcd-a4716940c102",
+      "username": "John Doe",
+      "email": "johndoe@email.com"
+    }
+  ]
+}
+```
+
+## Update User Role
+
+| Rota                              | Tipo de requisição |
+| --------------------------------- | ------------------ |
+| **`containers/update/user/role`** | **`PUT`**          |
+
+**Exemplo de requisição**
+
+| Campo             | Tipo         | Descrição                                           |
+| ----------------- | ------------ | --------------------------------------------------- |
+| **`containerId`** | **`String`** | Id do container                                     |
+| **`userId`**      | **`String`** | Id do usuário que vai ser atualizado                |
+| **`userRole`**    | **`String`** | Role do usuário, pode ser: (Admin, Moderator, User) |
+
+**Tipo de retorno**
+
+200 - Success
+
+## Add User
+
+| Rota                      | Tipo de requisição |
+| ------------------------- | ------------------ |
+| **`containers/add/user`** | **`PUT`**          |
+
+**Exemplo de requisição**
+
+| Campo             | Tipo         | Descrição                            |
+| ----------------- | ------------ | ------------------------------------ |
+| **`containerId`** | **`String`** | Id do container                      |
+| **`userId`**      | **`String`** | Id do usuário que vai ser adicionado |
+
+**Tipo de retorno**
+
+200 - Success
+
+## Update container
+
+| Rota                    | Tipo de requisição |
+| ----------------------- | ------------------ |
+| **`containers/update`** | **`PUT`**          |
+
+**Exemplo de requisição**
+
+| Campo             | Tipo          | Descrição                  |
+| ----------------- | ------------- | -------------------------- |
+| **`containerId`** | **`String`**  | Id do container            |
+| **`name`**        | **`String`**  | Nome do container          |
+| **`description`** | **`String`**  | Descrição do container     |
+| **`isPublic`**    | **`Boolean`** | Deixar o container publico |
+
+**Tipo de retorno**
+
+200 - Success
+
+## Remove User
+
+| Rota                         | Tipo de requisição |
+| ---------------------------- | ------------------ |
+| **`containers/remove/user`** | **`PATCH`**        |
+
+**Exemplo de request**
+
+| Campo             | Tipo         | Descrição       |
+| ----------------- | ------------ | --------------- |
+| **`containerId`** | **`String`** | Id do container |
+| **`userId`**      | **`String`** | Id do usuário   |
+
+**Tipo de retorno**
+
+200 - Success
+
+## Delete Container
+
+| Rota                    | Tipo de requisição |
+| ----------------------- | ------------------ |
+| **`containers/delete`** | **`DELETE`**       |
+
+**Exemplo de request**
+
+| Campo             | Tipo         | Descrição       |
+| ----------------- | ------------ | --------------- |
+| **`containerId`** | **`String`** | Id do container |
+
+**Tipo de retorno**
+
+200 - Success
+
+### Rotas de Folders
+
+**Todas requestes da rota Containers deve conter o campo authorization no header para utilizar a request**
+
+## Create Folder
+
+| Rota                            | Tipo de requisição |
+| ------------------------------- | ------------------ |
+| **`containers/folders/create`** | **`POST`**         |
+
+**Exemplo de request**
+
+| Campo             | Tipo         | Descrição          |
+| ----------------- | ------------ | ------------------ |
+| **`containerId`** | **`String`** | Id do container    |
+| **`name`**        | **`String`** | Nome da Pasta      |
+| **`description`** | **`String`** | Descrição da pasta |
+
+**Tipo de retorno**
+
+201 - Created
+
+## Update Folder
+
+| Rota                            | Tipo de requisição |
+| ------------------------------- | ------------------ |
+| **`containers/folders/update`** | **`PUT`**          |
+
+**Exemplo de request**
+
+| Campo             | Tipo         | Descrição          |
+| ----------------- | ------------ | ------------------ |
+| **`containerId`** | **`String`** | Id do container    |
+| **`name`**        | **`String`** | Nome da Pasta      |
+| **`description`** | **`String`** | Descrição da pasta |
+| **`id`**          | **`String`** | Id da pasta        |
+
+**Tipo de retorno**
+
+200 - Success
+
+## Delete Folder
+
+| Rota                            | Tipo de requisição |
+| ------------------------------- | ------------------ |
+| **`containers/folders/delete`** | **`DELETE`**       |
+
+**Exemplo de request**
+
+| Campo             | Tipo         | Descrição       |
+| ----------------- | ------------ | --------------- |
+| **`containerId`** | **`String`** | Id do container |
+| **`folderId`**    | **`String`** | Id da pasta     |
+
+**Tipo de retorno**
+
+200 - Success
+
+## Find Many Folders
+
+| Rota                              | Tipo de requisição |
+| --------------------------------- | ------------------ |
+| **`containers/folders/findMany`** | **`GET`**          |
+
+**Exemplo de Request**
+
+| Campo             | Tipo         | Descrição       |
+| ----------------- | ------------ | --------------- |
+| **`containerId`** | **`String`** | Id do container |
+
+**Tipo de retorno**
+
+```json
+[
+  {
+    "id": "0900512c-5315-4436-bab6-6e91bfbbd6a8",
+    "name": "new name",
+    "description": "new description",
+    "containerId": "c87561f2-2a1c-4d12-900d-3ff2291d2c33",
+    "createdAt": "2024-07-09T17:23:39.881Z",
+    "author": "John Doe"
+  }
+]
+```
+
+### Tasks Routes
+
+**Todas requestes da rota Containers deve conter o campo authorization no header para utilizar a request**
+
+## Create Task
+
+| Rota                                  | Tipo de requisição |
+| ------------------------------------- | ------------------ |
+| **`containers/folders/tasks/create`** | **`POST`**         |
+
+**Exemplo de request**
+
+| Campo             | Tipo         | Descrição                               |
+| ----------------- | ------------ | --------------------------------------- |
+| **`containerId`** | **`String`** | Id do container                         |
+| **`folderId`**    | **`String`** | Id da pasta                             |
+| **`name`**        | **`String`** | Nome da task                            |
+| **`description`** | **`String`** | Descrição da task                       |
+| **`status`**      | **`String`** | Tipo de status (Open, InProgress, Done) |
+
+**Tipo de retorno**
+
+201 - Created
+
+## Update Task
+
+| Rota                                  | Tipo de requisição |
+| ------------------------------------- | ------------------ |
+| **`containers/folders/tasks/update`** | **`PUT`**          |
+
+**Exemplo de request**
+
+| Campo             | Tipo         | Descrição                               |
+| ----------------- | ------------ | --------------------------------------- |
+| **`containerId`** | **`String`** | Id do container                         |
+| **`folderId`**    | **`String`** | Id da pasta                             |
+| **`id`**          | **`String`** | Id da task                              |
+| **`title`**       | **`String`** | Nome da task                            |
+| **`description`** | **`String`** | Descrição da task                       |
+| **`status`**      | **`String`** | Tipo de status (Open, InProgress, Done) |
+
+**Tipo de retorno**
+
+200 - Success
+
+## Find Many Tasks
+
+| Rota                                    | Tipo de requisição |
+| --------------------------------------- | ------------------ |
+| **`containers/folders/tasks/findMany`** | **`GET`**          |
+
+**Exemplo de request**
+
+| Campo          | Tipo         | Descrição   |
+| -------------- | ------------ | ----------- |
+| **`folderId`** | **`String`** | Id da pasta |
+
+**Tipo de retorno**
+
+```json
+[
+  {
+    "id": "8ad8d009-d9a4-4515-ac02-b183be2aea07",
+    "name": "First Task",
+    "description": "First description task",
+    "folderId": "0900512c-5315-4436-bab6-6e91bfbbd6a8",
+    "author": "John Doe",
+    "createdAt": "2024-07-09T17:31:42.710Z",
+    "status": "Open"
+  }
+]
+```
+
+## Delete Task
+
+| Rota                                  | Tipo de requisição |
+| ------------------------------------- | ------------------ |
+| **`containers/folders/tasks/delete`** | **`DELETE`**       |
+
+**Exemplo de request**
+
+| Campo             | Tipo         | Descrição       |
+| ----------------- | ------------ | --------------- |
+| **`containerId`** | **`String`** | Id do container |
+| **`taskId`**      | **`String`** | Id da task      |
+
+**Tipo de retorno**
+
+200 - Success

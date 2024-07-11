@@ -37,8 +37,8 @@ export class AuthController {
     });
   }
 
-  @Post('/signin')
-  async signin(@Body(new ValidatorPipe(CreateUserSchema)) body: IUserCreate) {
+  @Post('/create')
+  async create(@Body(new ValidatorPipe(CreateUserSchema)) body: IUserCreate) {
     await this.prismaService.$transaction(async (transaction) => {
       return await this.userService.createUser(body, transaction);
     });
